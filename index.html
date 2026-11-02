@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f8ef">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
   <title>Little Sums — printable maths worksheets</title>
   <style>
     :root {
@@ -45,7 +46,7 @@
     .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
     label, .field-label { display: block; color: #37453b; font-size: 13px; font-weight: 750; }
     .field-hint { color: #9aa69a; font-size: 11px; }
-    select { width: 100%; height: 44px; padding: 0 38px 0 13px; border: 1px solid #dce4d8; border-radius: 10px; outline: none; background: #fff; color: var(--ink); font-size: 14px; font-weight: 650; cursor: pointer; }
+    select { width: 100%; height: 44px; padding: 0 50px 0 13px; border: 1px solid #dce4d8; border-radius: 10px; outline: none; appearance: none; -webkit-appearance: none; background-color: #fff; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m3 6 5 5 5-5' fill='none' stroke='%2337433a' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 18px center; background-size: 16px; color: var(--ink); font-size: 14px; font-weight: 650; cursor: pointer; }
     select:focus { border-color: #84a98b; box-shadow: 0 0 0 3px rgba(91,139,99,.13); }
     .count-options { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; }
     .count-option { position: relative; }
@@ -101,7 +102,6 @@
     .sum-rule { height: 2px; margin: .55cqw 0 0 2.6cqw; background: #66776a; }
     .answer-space { height: 6.2cqw; margin: 0 0 0 2.6cqw; border-bottom: 1px dashed #c8d1c5; }
     .sheet-footer { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; margin-top: 2.2cqw; padding-top: 1.1cqw; border-top: 1px solid #edf0e9; color: #9aa49a; font-size: 1.25cqw; }
-    .footer-dots { color: #8da98b; letter-spacing: 4px; }
     .hero-art[hidden] { display: none !important; }
     .bonus-art { overflow: hidden; padding: 1.5cqw; border: 1px dashed #aab2aa; background: radial-gradient(ellipse at center, #f4f4f4 0%, #fff 70%); }
     .bonus-art svg { display: block; width: 100%; height: 100%; }
@@ -163,6 +163,7 @@
             <select id="operation">
               <option value="addition">Column addition</option>
               <option value="subtraction">Column subtraction</option>
+              <option value="mixed">Mixed addition &amp; subtraction</option>
             </select>
           </div>
           <div class="field">
@@ -220,7 +221,7 @@
           </header>
           <div class="student-fields"><span>Name <i class="write-line"></i></span><span>Date <i class="write-line date"></i></span></div>
           <div class="questions" id="questions" aria-live="polite"></div>
-          <footer class="sheet-footer"><span>Take your time and show your working.</span><span class="footer-dots">● ● ●</span></footer>
+          <footer class="sheet-footer"><span>Take your time and show your working.</span></footer>
         </article>
       </section>
     </div>
@@ -261,7 +262,7 @@
       const params = new URLSearchParams(window.location.search);
       const validLengths = ['10s', '100s', '1000s', 'random'];
       const requestedCount = Number(params.get('count'));
-      if (['addition', 'subtraction'].includes(params.get('operation'))) operationEl.value = params.get('operation');
+      if (['addition', 'subtraction', 'mixed'].includes(params.get('operation'))) operationEl.value = params.get('operation');
       if (validLengths.includes(params.get('length'))) lengthEl.value = params.get('length');
       if (Number.isInteger(requestedCount) && requestedCount >= 4 && requestedCount <= 20) {
         document.documentElement.dataset.initialCount = String(requestedCount);
@@ -317,15 +318,15 @@
       }
       function makeSums() {
         const count = Number(document.querySelector('input[name="question-count"]:checked').value);
-        const subtract = operationEl.value === 'subtraction';
         const lengths = lengthEl.value === 'random'
           ? [2, 3, 4]
           : [{ '10s': 2, '100s': 3, '1000s': 4 }[lengthEl.value]];
         const exchangeCount = exchangeEl.checked ? Math.ceil(count / 2) : 0;
         const questions = Array.from({ length: count }, (_, index) => {
           const digits = lengths[randomInt(0, lengths.length - 1)];
+          const subtract = operationEl.value === 'subtraction' || (operationEl.value === 'mixed' && index >= Math.ceil(count / 2));
           const requiresExchange = exchangeEl.checked && index < exchangeCount;
-          return makePair(digits, subtract, requiresExchange);
+          return { ...makePair(digits, subtract, requiresExchange), subtract };
         });
         for (let i = questions.length - 1; i > 0; i--) {
           const j = randomInt(0, i);
@@ -370,16 +371,18 @@
         syncUrl();
       }
       function render() {
+        const mixed = operationEl.value === 'mixed';
         const subtract = operationEl.value === 'subtraction';
-        const symbol = subtract ? '−' : '+';
-        const title = subtract ? 'Column Subtraction' : 'Column Addition';
+        const title = mixed ? 'Mixed Addition & Subtraction' : subtract ? 'Column Subtraction' : 'Column Addition';
         sheetTitle.textContent = title;
-        sheetSubtitle.textContent = subtract ? 'Line up the numbers. Take one away!' : 'Line up the numbers. Add them together!';
+        sheetSubtitle.textContent = mixed
+          ? 'Add and subtract. Line up each set of numbers!'
+          : subtract ? 'Line up the numbers. Take one away!' : 'Line up the numbers. Add them together!';
         sums = makeSums();
         const printColumns = Math.min(4, Math.ceil(Math.sqrt(sums.length)));
         questionsEl.style.setProperty('--print-columns', printColumns);
         questionsEl.style.setProperty('--print-rows', Math.ceil(sums.length / printColumns));
-        questionsEl.replaceChildren(...sums.map(({a,b}, index) => {
+        questionsEl.replaceChildren(...sums.map(({a,b,subtract: questionSubtract}, index) => {
           const card = document.createElement('div'); card.className = 'question';
           const number = document.createElement('span'); number.className = 'question-num'; number.textContent = String(index + 1).padStart(2, '0');
           const sum = document.createElement('div'); sum.className = 'sum';
@@ -393,7 +396,7 @@
           const numA = document.createElement('span'); numA.className = 'sum-number'; numA.textContent = a;
           rowA.append(blank, numA);
           const rowB = document.createElement('div'); rowB.className = 'sum-row';
-          const sign = document.createElement('span'); sign.className = 'sum-sign'; sign.textContent = symbol;
+          const sign = document.createElement('span'); sign.className = 'sum-sign'; sign.textContent = questionSubtract ? '−' : '+';
           const numB = document.createElement('span'); numB.className = 'sum-number'; numB.textContent = b;
           rowB.append(sign, numB);
           const rule = document.createElement('div'); rule.className = 'sum-rule';

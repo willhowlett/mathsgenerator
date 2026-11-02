@@ -6,7 +6,7 @@ Build a simple, child-friendly, single-page web app that generates printable mat
 
 ## Current worksheet options
 
-- Operation: column addition or column subtraction.
+- Operation: column addition, column subtraction, or mixed addition and subtraction. A mixed worksheet must include both operations, with a varied question order.
 - Question count: any whole number from 4 to 20.
 - Number length: 10s (two-digit), 100s (three-digit), 1,000s (four-digit), or random across those lengths.
 - Exchange: when disabled, every question must be solvable without carrying (addition) or borrowing (subtraction). When enabled, at least half of the questions must require carrying or borrowing.
