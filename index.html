@@ -4,9 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f8ef">
-  <link rel="icon" type="image/svg+xml" href="./favicon.svg?v=2" sizes="any">
-  <link rel="icon" type="image/png" href="./favicon.png?v=2" sizes="48x48">
-  <link rel="shortcut icon" href="./favicon.ico?v=2" type="image/x-icon">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg?v=7" sizes="any">
   <title>Little Sums — printable maths worksheets</title>
   <style>
     :root {
@@ -35,7 +33,7 @@
     .app-shell { max-width: 1280px; margin: 0 auto; padding: 26px 38px 40px; }
     .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
     .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 800; font-size: 19px; letter-spacing: -.5px; }
-    .brand-mark { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; background: var(--green); color: white; font-size: 19px; transform: rotate(-5deg); }
+    .brand-mark { display: block; width: 36px; height: 36px; flex: 0 0 auto; }
     .top-note { color: var(--muted); font-size: 13px; font-weight: 600; }
     .layout { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 44px; align-items: start; }
     .sidebar { padding-top: 5px; }
@@ -71,7 +69,10 @@
     .print-button { width: 100%; height: 48px; display: inline-flex; justify-content: center; align-items: center; gap: 9px; border: 0; border-radius: 11px; background: var(--green); color: white; font-weight: 750; font-size: 14px; box-shadow: 0 5px 12px rgba(49,88,61,.16); cursor: pointer; transition: .15s ease; }
     .print-button:hover { background: var(--green-dark); transform: translateY(-1px); }
     .print-button:active { transform: translateY(0); }
-    .print-icon { font-size: 18px; line-height: 1; }
+    .button-icon { display: block; width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .regenerate-button { width: 100%; min-height: 43px; margin-bottom: 8px; display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid #dfe6db; border-radius: 10px; background: #fff; color: #526557; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s ease; }
+    .regenerate-button:hover { border-color: #a9bda8; background: #f8fbf6; }
+    .regenerate-button:focus-visible { outline: 3px solid rgba(91,139,99,.2); outline-offset: 2px; }
     .copy-button { width: 100%; min-height: 42px; margin-top: 8px; display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid #dfe6db; border-radius: 10px; background: #fff; color: #526557; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s ease; }
     .copy-button:hover { border-color: #a9bda8; background: #f8fbf6; }
     .copy-button:focus-visible { outline: 3px solid rgba(91,139,99,.2); outline-offset: 2px; }
@@ -148,7 +149,7 @@
 <body>
   <main class="app-shell">
     <header class="topbar">
-      <a class="brand" href="#" aria-label="Little Sums home"><span class="brand-mark">＋</span><span>little sums</span></a>
+      <a class="brand" href="#" aria-label="Little Sums home"><img class="brand-mark" src="./favicon.svg?v=7" alt=""><span>little sums</span></a>
       <div class="top-note">A little practice goes a long way <span aria-hidden="true">✳</span></div>
     </header>
     <div class="layout">
@@ -204,8 +205,9 @@
               </select>
             </div>
           </div>
-          <button class="print-button" id="print-button" type="button"><span class="print-icon" aria-hidden="true">⎙</span> Print worksheet</button>
-          <button class="copy-button" id="copy-button" type="button"><span aria-hidden="true">↗</span> Copy worksheet link</button>
+          <button class="regenerate-button" id="regenerate-button" type="button"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.8-4M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.8 4M20 20v-4h-4"/></svg> Regenerate questions</button>
+          <button class="print-button" id="print-button" type="button"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8V3h10v5"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/><path d="M18 12h.01"/></svg> Print worksheet</button>
+          <button class="copy-button" id="copy-button" type="button"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"/></svg> Copy worksheet link</button>
           <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
         </div>
         <div class="side-foot"><span aria-hidden="true">✿</span><span>Every worksheet is a brand-new set of sums, ready for little learners.</span></div>
@@ -261,19 +263,60 @@
       const params = new URLSearchParams(window.location.search);
       const validLengths = ['10s', '100s', '1000s', 'random'];
       const validCounts = [4, 6, 9, 12, 16, 20];
+      function decodeSharedState(hash) {
+        if (!hash || hash.length < 2) return null;
+        try {
+          let token = hash.slice(1).replace(/-/g, '+').replace(/_/g, '/');
+          token += '='.repeat((4 - token.length % 4) % 4);
+          const state = JSON.parse(atob(token));
+          if (state.v !== 1 || !['addition', 'subtraction', 'mixed'].includes(state.operation)) return null;
+          if (!validCounts.includes(state.count) || !validLengths.includes(state.length)) return null;
+          if (typeof state.exchange !== 'boolean' || !['none', ...artworkThemes].includes(state.artwork)) return null;
+          if (!Array.isArray(state.questions) || state.questions.length !== state.count) return null;
+          const expectedDigits = state.length === 'random' ? null : { '10s': 2, '100s': 3, '1000s': 4 }[state.length];
+          const questions = state.questions.map((question) => {
+            if (!Array.isArray(question) || question.length !== 3) return null;
+            const [a, b, subtract] = question;
+            if (!Number.isInteger(a) || !Number.isInteger(b) || typeof subtract !== 'boolean') return null;
+            if (a < 10 || b < 10 || a > 9999 || b > 9999 || (subtract && b > a)) return null;
+            const digitsA = String(a).length;
+            const digitsB = String(b).length;
+            if (expectedDigits && (digitsA !== expectedDigits || digitsB !== expectedDigits)) return null;
+            if (!expectedDigits && (digitsA < 2 || digitsA > 4 || digitsB < 2 || digitsB > 4)) return null;
+            if (state.operation === 'addition' && subtract) return null;
+            if (state.operation === 'subtraction' && !subtract) return null;
+            return { a, b, subtract };
+          });
+          if (questions.some((question) => question === null)) return null;
+          const exchangeQuestions = questions.filter(({ a, b, subtract }) => hasExchange(a, b, subtract)).length;
+          if (state.exchange ? exchangeQuestions < Math.ceil(state.count / 2) : exchangeQuestions > 0) return null;
+          if (state.operation === 'mixed' && (!questions.some(({ subtract }) => !subtract) || !questions.some(({ subtract }) => subtract))) return null;
+          return { ...state, questions };
+        } catch {
+          return null;
+        }
+      }
+      const sharedState = decodeSharedState(window.location.hash);
       const requestedCount = Number(params.get('count'));
-      if (['addition', 'subtraction', 'mixed'].includes(params.get('operation'))) operationEl.value = params.get('operation');
-      if (validLengths.includes(params.get('length'))) lengthEl.value = params.get('length');
-      if (validCounts.includes(requestedCount)) {
-        document.documentElement.dataset.initialCount = String(requestedCount);
+      if (sharedState) {
+        operationEl.value = sharedState.operation;
+        lengthEl.value = sharedState.length;
+        artworkEl.value = sharedState.artwork;
+        exchangeEl.checked = sharedState.exchange;
+        document.documentElement.dataset.initialCount = String(sharedState.count);
+        sums = sharedState.questions;
+      } else {
+        if (['addition', 'subtraction', 'mixed'].includes(params.get('operation'))) operationEl.value = params.get('operation');
+        if (validLengths.includes(params.get('length'))) lengthEl.value = params.get('length');
+        if (validCounts.includes(requestedCount)) document.documentElement.dataset.initialCount = String(requestedCount);
+        const requestedArtwork = params.get('artwork');
+        if (requestedArtwork === 'none' || artworkThemes.includes(requestedArtwork)) {
+          artworkEl.value = requestedArtwork;
+        } else if (params.has('dinosaurs')) {
+          artworkEl.value = params.get('dinosaurs') === 'false' ? 'none' : 'dinosaurs';
+        }
+        if (params.has('exchange')) exchangeEl.checked = params.get('exchange') === 'true';
       }
-      const requestedArtwork = params.get('artwork');
-      if (requestedArtwork === 'none' || artworkThemes.includes(requestedArtwork)) {
-        artworkEl.value = requestedArtwork;
-      } else if (params.has('dinosaurs')) {
-        artworkEl.value = params.get('dinosaurs') === 'false' ? 'none' : 'dinosaurs';
-      }
-      if (params.has('exchange')) exchangeEl.checked = params.get('exchange') === 'true';
 
       for (const n of validCounts) {
         const label = document.createElement('label');
@@ -337,12 +380,18 @@
       function syncUrl() {
         const selectedCount = document.querySelector('input[name="question-count"]:checked').value;
         const url = new URL(window.location.href);
-        url.searchParams.set('operation', operationEl.value);
-        url.searchParams.set('count', selectedCount);
-        url.searchParams.set('length', lengthEl.value);
-        url.searchParams.set('exchange', String(exchangeEl.checked));
-        url.searchParams.set('artwork', artworkEl.value);
-        url.searchParams.delete('dinosaurs');
+        ['operation', 'count', 'length', 'exchange', 'artwork', 'dinosaurs'].forEach((key) => url.searchParams.delete(key));
+        const state = {
+          v: 1,
+          operation: operationEl.value,
+          count: Number(selectedCount),
+          length: lengthEl.value,
+          exchange: exchangeEl.checked,
+          artwork: artworkEl.value,
+          questions: sums.map(({ a, b, subtract }) => [a, b, subtract])
+        };
+        const token = btoa(JSON.stringify(state)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+        url.hash = token;
         window.history.replaceState(null, '', url);
       }
       function artworkSvg(theme) {
@@ -358,7 +407,7 @@
         render();
         syncUrl();
       }
-      function render() {
+      function render(regenerate = true) {
         const mixed = operationEl.value === 'mixed';
         const subtract = operationEl.value === 'subtraction';
         const title = mixed ? 'Mixed Addition & Subtraction' : subtract ? 'Column Subtraction' : 'Column Addition';
@@ -366,7 +415,7 @@
         sheetSubtitle.textContent = mixed
           ? 'Add and subtract. Line up each set of numbers!'
           : subtract ? 'Line up the numbers. Take one away!' : 'Line up the numbers. Add them together!';
-        sums = makeSums();
+        if (regenerate || !sums.length) sums = makeSums();
         const printColumns = Math.min(4, Math.ceil(Math.sqrt(sums.length)));
         questionsEl.style.setProperty('--print-columns', printColumns);
         questionsEl.style.setProperty('--print-rows', Math.ceil(sums.length / printColumns));
@@ -400,8 +449,10 @@
         syncUrl();
       });
       exchangeEl.addEventListener('change', handleOptionChange);
+      document.getElementById('regenerate-button').addEventListener('click', handleOptionChange);
       document.getElementById('print-button').addEventListener('click', () => window.print());
       document.getElementById('copy-button').addEventListener('click', async () => {
+        syncUrl();
         try {
           await navigator.clipboard.writeText(window.location.href);
         } catch {
@@ -417,7 +468,7 @@
         }
         copyStatus.textContent = 'Worksheet link copied';
       });
-      render();
+      render(!sharedState);
     })();
   </script>
 </body>

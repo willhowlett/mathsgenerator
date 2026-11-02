@@ -13,6 +13,7 @@ Build a simple, child-friendly, single-page web app that generates printable mat
 - Artwork capability is implemented for none, dinosaurs, robots, ocean, jungle, knights, Greek myths, fairies, monsters, vehicles, K-pop, and rockstars. Keep its selector hidden in the interface for now; preserve its rendering and URL support so it can be re-enabled later. When selected through a saved URL, the theme gets a prominent illustration at the top-right. None hides all artwork.
 
 Generate fresh questions when a question-generating option changes. Changing the artwork option must not regenerate the questions.
+Provide a regenerate action that creates a new question set using the current options and updates the shared URL state.
 
 ## Worksheet layout and printing
 
@@ -26,10 +27,10 @@ Generate fresh questions when a question-generating option changes. Changing the
 
 ## Sharing settings
 
-- Persist the selected operation, question count, number length, exchange setting, and artwork theme in URL query parameters.
-- The copy-link action must copy a URL that restores those selected options when opened.
-- A direct visit to the app with no query string (including its clean GitHub Pages URL) must stay free of default query parameters. Add or update settings in the URL only after the user edits a form option; copying an untouched default page must not add them.
-- Unknown or invalid query parameter values should fall back to valid defaults.
+- Persist the selected operation, question count, number length, exchange setting, artwork theme, and the generated questions in one versioned URL hash payload.
+- Opening a shared hash link must restore the exact questions and options without regenerating them. The copy-link action must encode the current worksheet, including on an untouched default page.
+- A direct visit to the app with no query or hash (including its clean GitHub Pages URL) must stay free of default URL state. Write the hash only after a user edits an option or requests a copy link.
+- Invalid hash data should be rejected safely and fall back to valid legacy query settings or app defaults. Continue reading the older query parameters for compatibility.
 
 ## Implementation guidance
 
