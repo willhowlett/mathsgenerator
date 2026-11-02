@@ -327,7 +327,6 @@
         const printColumns = Math.min(4, Math.ceil(Math.sqrt(sums.length)));
         questionsEl.style.setProperty('--print-columns', printColumns);
         questionsEl.style.setProperty('--print-rows', Math.ceil(sums.length / printColumns));
-        syncUrl();
         questionsEl.replaceChildren(...sums.map(({a,b}, index) => {
           const card = document.createElement('div'); card.className = 'question';
           const number = document.createElement('span'); number.className = 'question-num'; number.textContent = String(index + 1).padStart(2, '0');
@@ -359,7 +358,6 @@
       exchangeEl.addEventListener('change', render);
       document.getElementById('print-button').addEventListener('click', () => window.print());
       document.getElementById('copy-button').addEventListener('click', async () => {
-        syncUrl();
         try {
           await navigator.clipboard.writeText(window.location.href);
         } catch {
