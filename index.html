@@ -70,13 +70,18 @@
     .print-button:hover { background: var(--green-dark); transform: translateY(-1px); }
     .print-button:active { transform: translateY(0); }
     .button-icon { display: block; width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    .regenerate-button { width: 100%; min-height: 43px; margin-bottom: 8px; display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid #dfe6db; border-radius: 10px; background: #fff; color: #526557; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s ease; }
+    .action-buttons { display: flex; flex-direction: column; gap: 10px; }
+    .action-buttons button { display: grid; grid-template-columns: 20px 145px; justify-content: center; align-items: center; column-gap: 12px; }
+    .button-label { text-align: left; white-space: nowrap; }
+    .regenerate-button { width: 100%; min-height: 43px; display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid #dfe6db; border-radius: 10px; background: #fff; color: #526557; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s ease; }
     .regenerate-button:hover { border-color: #a9bda8; background: #f8fbf6; }
     .regenerate-button:focus-visible { outline: 3px solid rgba(91,139,99,.2); outline-offset: 2px; }
-    .copy-button { width: 100%; min-height: 42px; margin-top: 8px; display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid #dfe6db; border-radius: 10px; background: #fff; color: #526557; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s ease; }
+    .copy-button { width: 100%; min-height: 42px; display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid #dfe6db; border-radius: 10px; background: #fff; color: #526557; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s ease; }
     .copy-button:hover { border-color: #a9bda8; background: #f8fbf6; }
     .copy-button:focus-visible { outline: 3px solid rgba(91,139,99,.2); outline-offset: 2px; }
     .copy-status { min-height: 16px; margin: 6px 0 -4px; color: #628368; text-align: center; font-size: 11px; }
+    .answer-toggle { display: flex; align-items: center; justify-content: flex-end; gap: 7px; margin: 10px 2px 0; color: #65736a; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .answer-toggle input { width: 14px; height: 14px; margin: 0; accent-color: var(--green); }
     .side-foot { display: flex; gap: 8px; align-items: center; margin: 17px 4px 0; color: #89978c; font-size: 11px; line-height: 1.45; }
     .side-foot span:first-child { font-size: 15px; }
     .preview-area { min-width: 0; }
@@ -85,6 +90,7 @@
     .live-badge { display: inline-flex; align-items: center; gap: 6px; color: #7d8d80; font-size: 11px; font-weight: 650; }
     .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #79a87f; }
     .worksheet { position: relative; container-type: inline-size; display: flex; flex-direction: column; width: 100%; max-width: 680px; aspect-ratio: 210 / 297; min-height: 0; margin: 0 auto; overflow: hidden; padding: 9.52% 10% 8.57%; border: 1px solid #ebede6; border-radius: 6px; background: var(--paper); box-shadow: var(--shadow); filter: grayscale(1); }
+    .answer-sheet { display: none !important; }
     .sheet-topline { height: 5px; position: absolute; inset: 0 0 auto; background: linear-gradient(90deg,#7daa78 0 24%,#f4cd71 24% 48%,#e78368 48% 72%,#a6bd92 72%); }
     .worksheet-heading { display: flex; flex: 0 0 auto; align-items: flex-start; justify-content: space-between; gap: 3%; padding-bottom: 2.86%; border-bottom: 1px solid #e8ece3; }
     .sheet-kicker { margin-bottom: .8cqw; color: #7c9b7b; font-size: 1.3cqw; font-weight: 850; letter-spacing: .2cqw; text-transform: uppercase; }
@@ -96,14 +102,18 @@
     .write-line { display: inline-block; width: 20cqw; margin-left: .85cqw; border-bottom: 1px solid #bdc8ba; transform: translateY(2px); }
     .write-line.date { width: 12.86cqw; }
     .questions { display: grid; flex: 1 1 0; min-height: 0; grid-template-columns: repeat(var(--print-columns, 4), minmax(0,1fr)); grid-template-rows: repeat(var(--print-rows, 1), minmax(0,1fr)); gap: 2.38cqw 1.9cqw; }
+    .answers { display: grid; flex: 1 1 0; min-height: 0; grid-template-columns: minmax(0,1fr); align-content: start; margin-top: 2cqw; }
+    .answer-item { display: grid; grid-template-columns: 5cqw 1fr; align-items: center; min-height: 9cqw; padding: 0 1cqw; border-bottom: 1px solid #e6eae1; }
+    .answer-item-number { color: #7f8b80; font-size: 1.5cqw; font-weight: 700; }
+    .answer-item-value { color: #29372d; font-family: "Courier New", monospace; font-size: 2.8cqw; font-weight: 700; }
     .question { position: relative; display: flex; min-height: 0; align-items: center; justify-content: center; padding: 1.43cqw .95cqw; border: 1px solid #e6eae1; border-radius: 1.13cqw; background: #fff; }
     .question-num { position: absolute; top: .95cqw; left: 1.2cqw; color: #a5b0a3; font-size: 1.2cqw; font-weight: 700; }
-    .sum { width: 11cqw; margin: 0 auto; color: #29372d; font-family: "Courier New", monospace; font-size: var(--sum-font-cqw, 3cqw); font-weight: 700; line-height: 1.25; }
-    .sum-row { display: grid; grid-template-columns: 2.27cqw 1fr; align-items: center; }
+    .sum { width: 12.5cqw; margin: 0 auto; color: #29372d; font-family: "Courier New", monospace; font-size: var(--sum-font-cqw, 3cqw); font-weight: 700; line-height: 1.25; }
+    .sum-row { display: grid; grid-template-columns: 4cqw 1fr; align-items: center; }
     .sum-sign { text-align: left; color: #719078; }
     .sum-number { text-align: right; letter-spacing: 1px; }
-    .sum-rule { height: 2px; margin: .55cqw 0 0 2.6cqw; background: #66776a; }
-    .answer-space { height: 6.2cqw; margin: 0 0 0 2.6cqw; border-bottom: 1px dashed #c8d1c5; }
+    .sum-rule { height: 2px; margin: .55cqw 0 0 4cqw; background: #66776a; }
+    .answer-space { height: 6.2cqw; margin: 0 0 0 4cqw; border-bottom: 1px dashed #c8d1c5; }
     .sheet-footer { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; margin-top: 2.2cqw; padding-top: 1.1cqw; border-top: 1px solid #edf0e9; color: #9aa49a; font-size: 1.25cqw; }
     .hero-art[hidden] { display: none !important; }
     @media (max-width: 960px) {
@@ -128,6 +138,7 @@
       .topbar, .sidebar, .preview-header { display: none !important; }
       .layout { display: block; }
       .worksheet { width: 210mm; max-width: none; min-height: 0; height: 297mm; aspect-ratio: auto; margin: 0 auto; padding: 20mm 21mm 18mm; border: 0; border-radius: 0; box-shadow: none; overflow: hidden; }
+      .answer-sheet.is-included { display: flex !important; break-before: page; page-break-before: always; }
       .sheet-topline { height: 4px; }
       .worksheet-heading { flex: 0 0 auto; padding-bottom: 6mm; }
       .worksheet h2 { font-size: 26pt; }
@@ -138,6 +149,10 @@
       .write-line { width: 42mm; }
       .write-line.date { width: 27mm; }
       .questions { flex: 1 1 0; min-height: 0; grid-template-columns: repeat(var(--print-columns), minmax(0,1fr)); grid-template-rows: repeat(var(--print-rows), minmax(0,1fr)); gap: 5mm 4mm; }
+      .answers { flex: 1 1 0; min-height: 0; margin-top: 6mm; }
+      .answer-item { grid-template-columns: 15mm 1fr; min-height: 10mm; padding: 0 2mm; border-color: #dfe5db; }
+      .answer-item-number { font-size: 9pt; }
+      .answer-item-value { font-size: 17pt; }
       .question { display: flex; align-items: center; justify-content: center; min-height: 0; height: 100%; padding: 3mm 2mm; border-color: #dfe5db; break-inside: avoid; }
       .question-num { top: 2mm; left: 2.5mm; font-size: 7pt; }
       .sum { margin: 0 auto; font-size: var(--sum-font-print, 18pt); }
@@ -205,9 +220,12 @@
               </select>
             </div>
           </div>
-          <button class="regenerate-button" id="regenerate-button" type="button"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.8-4M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.8 4M20 20v-4h-4"/></svg> Regenerate questions</button>
-          <button class="print-button" id="print-button" type="button"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8V3h10v5"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/><path d="M18 12h.01"/></svg> Print worksheet</button>
-          <button class="copy-button" id="copy-button" type="button"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"/></svg> Copy worksheet link</button>
+          <div class="action-buttons">
+            <button class="regenerate-button" id="regenerate-button" type="button"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.8-4M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14.8 4M20 20v-4h-4"/></svg><span class="button-label">Regenerate questions</span></button>
+            <button class="copy-button" id="copy-button" type="button"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.07 0l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.72"/><path d="M14 11a5 5 0 0 0-7.07 0l-3 3a5 5 0 0 0 7.07 7.07l1.72-1.72"/></svg><span class="button-label">Copy worksheet link</span></button>
+            <button class="print-button" id="print-button" type="button"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 8V3h10v5"/><path d="M6 18H4a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/><path d="M18 12h.01"/></svg><span class="button-label">Print worksheet</span></button>
+          </div>
+          <label class="answer-toggle" for="include-answers"><span>Include answer sheet</span><input id="include-answers" type="checkbox"></label>
           <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
         </div>
         <div class="side-foot"><span aria-hidden="true">✿</span><span>Every worksheet is a brand-new set of sums, ready for little learners.</span></div>
@@ -224,6 +242,14 @@
           <div class="questions" id="questions" aria-live="polite"></div>
           <footer class="sheet-footer"><span>Take your time and show your working.</span></footer>
         </article>
+        <article class="worksheet answer-sheet" id="answer-sheet" aria-label="Answer sheet for printing">
+          <div class="sheet-topline"></div>
+          <header class="worksheet-heading">
+            <div><div class="sheet-kicker">Little sums · answer key</div><h2>Answer Sheet</h2><p class="sheet-subtitle" id="answer-subtitle">Answers for your worksheet.</p></div>
+          </header>
+          <div class="answers" id="answers"></div>
+          <footer class="sheet-footer"><span>Use this page to check the worksheet.</span></footer>
+        </article>
       </section>
     </div>
   </main>
@@ -235,6 +261,10 @@
       const lengthEl = document.getElementById('number-length');
       const artworkEl = document.getElementById('artwork');
       const exchangeEl = document.getElementById('exchange');
+      const answerToggle = document.getElementById('include-answers');
+      const answerSheet = document.getElementById('answer-sheet');
+      const answersEl = document.getElementById('answers');
+      const answerSubtitle = document.getElementById('answer-subtitle');
       const copyStatus = document.getElementById('copy-status');
       const sheetTitle = document.getElementById('sheet-title');
       const sheetSubtitle = document.getElementById('sheet-subtitle');
@@ -269,7 +299,8 @@
           let token = hash.slice(1).replace(/-/g, '+').replace(/_/g, '/');
           token += '='.repeat((4 - token.length % 4) % 4);
           const state = JSON.parse(atob(token));
-          if (state.v !== 1 || !['addition', 'subtraction', 'mixed'].includes(state.operation)) return null;
+          if (![1, 2].includes(state.v) || !['addition', 'subtraction', 'mixed'].includes(state.operation)) return null;
+          if (state.v === 2 && typeof state.includeAnswers !== 'boolean') return null;
           if (!validCounts.includes(state.count) || !validLengths.includes(state.length)) return null;
           if (typeof state.exchange !== 'boolean' || !['none', ...artworkThemes].includes(state.artwork)) return null;
           if (!Array.isArray(state.questions) || state.questions.length !== state.count) return null;
@@ -291,7 +322,7 @@
           const exchangeQuestions = questions.filter(({ a, b, subtract }) => hasExchange(a, b, subtract)).length;
           if (state.exchange ? exchangeQuestions < Math.ceil(state.count / 2) : exchangeQuestions > 0) return null;
           if (state.operation === 'mixed' && (!questions.some(({ subtract }) => !subtract) || !questions.some(({ subtract }) => subtract))) return null;
-          return { ...state, questions };
+          return { ...state, includeAnswers: state.includeAnswers === true, questions };
         } catch {
           return null;
         }
@@ -303,6 +334,7 @@
         lengthEl.value = sharedState.length;
         artworkEl.value = sharedState.artwork;
         exchangeEl.checked = sharedState.exchange;
+        answerToggle.checked = sharedState.includeAnswers;
         document.documentElement.dataset.initialCount = String(sharedState.count);
         sums = sharedState.questions;
       } else {
@@ -382,12 +414,13 @@
         const url = new URL(window.location.href);
         ['operation', 'count', 'length', 'exchange', 'artwork', 'dinosaurs'].forEach((key) => url.searchParams.delete(key));
         const state = {
-          v: 1,
+          v: 2,
           operation: operationEl.value,
           count: Number(selectedCount),
           length: lengthEl.value,
           exchange: exchangeEl.checked,
           artwork: artworkEl.value,
+          includeAnswers: answerToggle.checked,
           questions: sums.map(({ a, b, subtract }) => [a, b, subtract])
         };
         const token = btoa(JSON.stringify(state)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
@@ -402,6 +435,21 @@
         const selectedTheme = artworkEl.value;
         heroArt.innerHTML = selectedTheme === 'none' ? '' : artworkSvg(selectedTheme);
         heroArt.hidden = selectedTheme === 'none';
+      }
+      function renderAnswerSheet() {
+        answerSheet.classList.toggle('is-included', answerToggle.checked);
+        const operationName = operationEl.value === 'mixed'
+          ? 'mixed addition and subtraction'
+          : operationEl.value === 'subtraction' ? 'column subtraction' : 'column addition';
+        answerSubtitle.textContent = `Answers for ${operationName}.`;
+        answersEl.replaceChildren(...sums.map(({ a, b, subtract }, index) => {
+          const item = document.createElement('div'); item.className = 'answer-item';
+          const number = document.createElement('span'); number.className = 'answer-item-number'; number.textContent = String(index + 1).padStart(2, '0');
+          const value = document.createElement('span'); value.className = 'answer-item-value';
+          value.textContent = subtract ? a - b : a + b;
+          item.append(number, value);
+          return item;
+        }));
       }
       function handleOptionChange() {
         render();
@@ -441,11 +489,16 @@
           sum.append(rowA, rowB, rule, answer); card.append(number, sum); return card;
         }));
         renderArtwork();
+        renderAnswerSheet();
       }
       operationEl.addEventListener('change', handleOptionChange);
       lengthEl.addEventListener('change', handleOptionChange);
       artworkEl.addEventListener('change', () => {
         renderArtwork();
+        syncUrl();
+      });
+      answerToggle.addEventListener('change', () => {
+        renderAnswerSheet();
         syncUrl();
       });
       exchangeEl.addEventListener('change', handleOptionChange);

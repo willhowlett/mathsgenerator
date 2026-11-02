@@ -8,6 +8,7 @@ Build a simple, child-friendly, single-page web app that generates printable mat
 
 - Operation: column addition, column subtraction, or mixed addition and subtraction. A mixed worksheet must include both operations, with a varied question order.
 - Question count: 4, 6, 9, 12, 16, or 20. These counts must fill the configured question grid exactly; do not add artwork or filler items to empty grid cells.
+- Optional answer sheet: place a small checkbox below the print button. When checked, print a second A4 page with answers; never show that page in the live preview.
 - Number length: 10s (two-digit), 100s (three-digit), 1,000s (four-digit), or random across those lengths.
 - Exchange: when disabled, every question must be solvable without carrying (addition) or borrowing (subtraction). When enabled, at least half of the questions must require carrying or borrowing.
 - Artwork capability is implemented for none, dinosaurs, robots, ocean, jungle, knights, Greek myths, fairies, monsters, vehicles, K-pop, and rockstars. Keep its selector hidden in the interface for now; preserve its rendering and URL support so it can be re-enabled later. When selected through a saved URL, the theme gets a prominent illustration at the top-right. None hides all artwork.
@@ -18,7 +19,7 @@ Provide a regenerate action that creates a new question set using the current op
 ## Worksheet layout and printing
 
 - Provide a live preview that closely matches the printed page, including its A4 portrait proportions and question grid.
-- Print on a single A4 portrait page. Use the available question area well: size grid rows and columns to the selected question count and stretch the grid to fill that area.
+- Print the worksheet on one A4 portrait page. If the answer-sheet option is selected, print the answers on a separate second A4 portrait page. Use the available question area well: size grid rows and columns to the selected question count and stretch the grid to fill that area.
 - Keep the worksheet black and white/grayscale for economical printing, including artwork and decorative details.
 - Keep name and date labels aligned with their writing lines.
 - Each vertical sum needs a clear answer space between the solid calculation line and the dotted answer line.
@@ -27,7 +28,7 @@ Provide a regenerate action that creates a new question set using the current op
 
 ## Sharing settings
 
-- Persist the selected operation, question count, number length, exchange setting, artwork theme, and the generated questions in one versioned URL hash payload.
+- Persist the selected operation, question count, number length, exchange setting, artwork theme, answer-sheet setting, and generated questions in one versioned URL hash payload.
 - Opening a shared hash link must restore the exact questions and options without regenerating them. The copy-link action must encode the current worksheet, including on an untouched default page.
 - A direct visit to the app with no query or hash (including its clean GitHub Pages URL) must stay free of default URL state. Write the hash only after a user edits an option or requests a copy link.
 - Invalid hash data should be rejected safely and fall back to valid legacy query settings or app defaults. Continue reading the older query parameters for compatibility.
