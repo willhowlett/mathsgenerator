@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f8ef">
+  <title>Little Sums — printable maths worksheets</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #27342c;
+      --muted: #718074;
+      --green: #426b4f;
+      --green-dark: #31583d;
+      --mint: #e6efdf;
+      --paper: #fffefa;
+      --line: #e2e8dc;
+      --coral: #e78368;
+      --yellow: #f4cd71;
+      --shadow: 0 18px 55px rgba(56, 77, 57, .09);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f5f8ef;
+      color: var(--ink);
+      font-family: ui-rounded, "Avenir Next", Avenir, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, select { font: inherit; }
+    .app-shell { max-width: 1280px; margin: 0 auto; padding: 26px 38px 40px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 800; font-size: 19px; letter-spacing: -.5px; }
+    .brand-mark { width: 36px; height: 36px; border-radius: 12px; display: grid; place-items: center; background: var(--green); color: white; font-size: 19px; transform: rotate(-5deg); }
+    .top-note { color: var(--muted); font-size: 13px; font-weight: 600; }
+    .layout { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 44px; align-items: start; }
+    .sidebar { padding-top: 5px; }
+    .eyebrow { color: #73927a; font-size: 11px; font-weight: 800; letter-spacing: 1.35px; text-transform: uppercase; }
+    h1 { margin: 12px 0 11px; max-width: 340px; font-size: clamp(32px, 3.7vw, 43px); line-height: 1.06; letter-spacing: -1.9px; }
+    .intro { margin: 0 0 28px; max-width: 310px; color: var(--muted); font-size: 15px; line-height: 1.6; }
+    .controls-card { padding: 22px; border: 1px solid #e6ecdf; border-radius: 19px; background: rgba(255,255,255,.72); box-shadow: 0 8px 24px rgba(59,82,56,.035); }
+    .field { margin-bottom: 20px; }
+    .field:last-of-type { margin-bottom: 22px; }
+    .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
+    label, .field-label { display: block; color: #37453b; font-size: 13px; font-weight: 750; }
+    .field-hint { color: #9aa69a; font-size: 11px; }
+    select { width: 100%; height: 44px; padding: 0 38px 0 13px; border: 1px solid #dce4d8; border-radius: 10px; outline: none; background: #fff; color: var(--ink); font-size: 14px; font-weight: 650; cursor: pointer; }
+    select:focus { border-color: #84a98b; box-shadow: 0 0 0 3px rgba(91,139,99,.13); }
+    .count-options { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; }
+    .count-option { position: relative; }
+    .count-option input { position: absolute; opacity: 0; pointer-events: none; }
+    .count-option span { height: 35px; display: grid; place-items: center; border: 1px solid #dfe6db; border-radius: 8px; background: white; color: #64736a; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s ease; }
+    .count-option input:checked + span { border-color: var(--green); background: var(--green); color: white; box-shadow: 0 3px 8px rgba(49,88,61,.17); }
+    .count-option input:focus-visible + span { outline: 3px solid rgba(91,139,99,.25); }
+    .art-select { display: flex; align-items: center; justify-content: space-between; min-height: 55px; padding: 8px 11px; border: 1px solid #dfe6db; border-radius: 10px; background: white; }
+    .art-info { display: flex; align-items: center; gap: 10px; }
+    .art-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; background: #f7eed7; font-size: 21px; }
+    .art-copy strong { display: block; font-size: 13px; }
+    .art-copy small { display: block; margin-top: 2px; color: #8a978d; font-size: 11px; }
+    .switch { position: relative; width: 38px; height: 22px; flex: 0 0 auto; }
+    .switch input { position: absolute; opacity: 0; }
+    .switch-track { position: absolute; inset: 0; border-radius: 20px; background: #d8dfd7; cursor: pointer; transition: .2s; }
+    .switch-track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: white; box-shadow: 0 1px 3px #0002; transition: .2s; }
+    .switch input:checked + .switch-track { background: #5b8a64; }
+    .switch input:checked + .switch-track::after { transform: translateX(16px); }
+    .switch input:focus-visible + .switch-track { outline: 3px solid #a7c4aa; outline-offset: 2px; }
+    .exchange-select { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 58px; padding: 9px 11px; border: 1px solid #dfe6db; border-radius: 10px; background: white; }
+    .exchange-copy strong { display: block; color: #37453b; font-size: 13px; }
+    .exchange-copy small { display: block; max-width: 220px; margin-top: 3px; color: #8a978d; font-size: 11px; line-height: 1.35; }
+    .print-button { width: 100%; height: 48px; display: inline-flex; justify-content: center; align-items: center; gap: 9px; border: 0; border-radius: 11px; background: var(--green); color: white; font-weight: 750; font-size: 14px; box-shadow: 0 5px 12px rgba(49,88,61,.16); cursor: pointer; transition: .15s ease; }
+    .print-button:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .print-button:active { transform: translateY(0); }
+    .print-icon { font-size: 18px; line-height: 1; }
+    .copy-button { width: 100%; min-height: 42px; margin-top: 8px; display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid #dfe6db; border-radius: 10px; background: #fff; color: #526557; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s ease; }
+    .copy-button:hover { border-color: #a9bda8; background: #f8fbf6; }
+    .copy-button:focus-visible { outline: 3px solid rgba(91,139,99,.2); outline-offset: 2px; }
+    .copy-status { min-height: 16px; margin: 6px 0 -4px; color: #628368; text-align: center; font-size: 11px; }
+    .side-foot { display: flex; gap: 8px; align-items: center; margin: 17px 4px 0; color: #89978c; font-size: 11px; line-height: 1.45; }
+    .side-foot span:first-child { font-size: 15px; }
+    .preview-area { min-width: 0; }
+    .preview-header { display: flex; justify-content: space-between; align-items: center; margin: 4px 2px 11px; }
+    .preview-title { color: #65766a; font-size: 12px; font-weight: 750; letter-spacing: .2px; }
+    .live-badge { display: inline-flex; align-items: center; gap: 6px; color: #7d8d80; font-size: 11px; font-weight: 650; }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #79a87f; }
+    .worksheet { position: relative; container-type: inline-size; display: flex; flex-direction: column; width: 100%; max-width: 680px; aspect-ratio: 210 / 297; min-height: 0; margin: 0 auto; overflow: hidden; padding: 9.52% 10% 8.57%; border: 1px solid #ebede6; border-radius: 6px; background: var(--paper); box-shadow: var(--shadow); filter: grayscale(1); }
+    .sheet-topline { height: 5px; position: absolute; inset: 0 0 auto; background: linear-gradient(90deg,#7daa78 0 24%,#f4cd71 24% 48%,#e78368 48% 72%,#a6bd92 72%); }
+    .worksheet-heading { display: flex; flex: 0 0 auto; align-items: flex-start; justify-content: space-between; gap: 3%; padding-bottom: 2.86%; border-bottom: 1px solid #e8ece3; }
+    .sheet-kicker { margin-bottom: .8cqw; color: #7c9b7b; font-size: 1.3cqw; font-weight: 850; letter-spacing: .2cqw; text-transform: uppercase; }
+    .worksheet h2 { margin: 0; color: #29382d; font-family: Georgia, "Times New Roman", serif; font-size: 4.37cqw; line-height: 1.05; letter-spacing: -.06cqw; }
+    .sheet-subtitle { margin: 1cqw 0 0; color: #8a978d; font-size: 1.51cqw; }
+    .dino-art { width: 18cqw; height: 13.5cqw; flex: 0 0 auto; margin-top: -.7cqw; }
+    .student-fields { display: flex; flex: 0 0 auto; gap: 13.8cqw; margin: 2.4cqw 0 2.86cqw; color: #65736a; font-size: 1.4cqw; font-weight: 650; }
+    .write-line { display: inline-block; width: 20cqw; margin-left: .85cqw; border-bottom: 1px solid #bdc8ba; transform: translateY(2px); }
+    .write-line.date { width: 12.86cqw; }
+    .questions { display: grid; flex: 1 1 0; min-height: 0; grid-template-columns: repeat(var(--print-columns, 4), minmax(0,1fr)); grid-template-rows: repeat(var(--print-rows, 1), minmax(0,1fr)); gap: 2.38cqw 1.9cqw; }
+    .question { position: relative; display: flex; min-height: 0; align-items: center; justify-content: center; padding: 1.43cqw .95cqw; border: 1px solid #e6eae1; border-radius: 1.13cqw; background: #fff; }
+    .question-num { position: absolute; top: .95cqw; left: 1.2cqw; color: #a5b0a3; font-size: 1.2cqw; font-weight: 700; }
+    .sum { width: 11cqw; margin: 0 auto; color: #29372d; font-family: "Courier New", monospace; font-size: var(--sum-font-cqw, 3cqw); font-weight: 700; line-height: 1.25; }
+    .sum-row { display: grid; grid-template-columns: 2.27cqw 1fr; align-items: center; }
+    .sum-sign { text-align: left; color: #719078; }
+    .sum-number { text-align: right; letter-spacing: 1px; }
+    .sum-rule { height: 2px; margin: .55cqw 0 0 2.6cqw; background: #66776a; }
+    .answer-space { height: 6.2cqw; margin: 0 0 0 2.6cqw; border-bottom: 1px dashed #c8d1c5; }
+    .sheet-footer { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; margin-top: 2.2cqw; padding-top: 1.1cqw; border-top: 1px solid #edf0e9; color: #9aa49a; font-size: 1.25cqw; }
+    .footer-dots { color: #8da98b; letter-spacing: 4px; }
+    .dino-art[hidden] { display: none !important; }
+    @media (max-width: 960px) {
+      .app-shell { padding: 24px 25px 35px; }
+      .layout { grid-template-columns: 285px minmax(0,1fr); gap: 25px; }
+    }
+    @media (max-width: 700px) {
+      .app-shell { padding: 17px 15px 28px; }
+      .topbar { margin-bottom: 22px; }
+      .top-note { font-size: 11px; }
+      .layout { grid-template-columns: 1fr; gap: 25px; }
+      .sidebar { padding: 0; }
+      h1 { font-size: 36px; max-width: none; }
+      .intro { max-width: 520px; margin-bottom: 20px; }
+      .controls-card { padding: 18px; }
+    }
+    @media (max-width: 390px) { .top-note { display: none; } }
+    @media print {
+      @page { size: A4 portrait; margin: 0; }
+      body { background: white; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .app-shell { width: auto; max-width: none; padding: 0; }
+      .topbar, .sidebar, .preview-header { display: none !important; }
+      .layout { display: block; }
+      .worksheet { width: 210mm; max-width: none; min-height: 0; height: 297mm; aspect-ratio: auto; margin: 0 auto; padding: 20mm 21mm 18mm; border: 0; border-radius: 0; box-shadow: none; overflow: hidden; }
+      .sheet-topline { height: 4px; }
+      .worksheet-heading { flex: 0 0 auto; padding-bottom: 6mm; }
+      .worksheet h2 { font-size: 26pt; }
+      .sheet-kicker { font-size: 8pt; }
+      .sheet-subtitle { font-size: 9pt; }
+      .dino-art { width: 38mm; height: 29mm; }
+      .student-fields { flex: 0 0 auto; margin: 5mm 0 6mm; font-size: 9pt; }
+      .write-line { width: 42mm; }
+      .write-line.date { width: 27mm; }
+      .questions { flex: 1 1 0; min-height: 0; grid-template-columns: repeat(var(--print-columns), minmax(0,1fr)); grid-template-rows: repeat(var(--print-rows), minmax(0,1fr)); gap: 5mm 4mm; }
+      .question { display: flex; align-items: center; justify-content: center; min-height: 0; height: 100%; padding: 3mm 2mm; border-color: #dfe5db; break-inside: avoid; }
+      .question-num { top: 2mm; left: 2.5mm; font-size: 7pt; }
+      .sum { margin: 0 auto; font-size: var(--sum-font-print, 18pt); }
+      .answer-space { height: 13mm; }
+      .sheet-footer { flex: 0 0 auto; margin-top: 6mm; padding-top: 3mm; font-size: 7pt; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Little Sums home"><span class="brand-mark">＋</span><span>little sums</span></a>
+      <div class="top-note">A little practice goes a long way <span aria-hidden="true">✳</span></div>
+    </header>
+    <div class="layout">
+      <section class="sidebar" aria-labelledby="page-title">
+        <div class="eyebrow">Print-ready practice</div>
+        <h1 id="page-title">Make maths<br>feel like fun.</h1>
+        <p class="intro">Create a fresh worksheet in seconds. Pick a skill, choose how many sums, then print and get practising.</p>
+        <div class="controls-card">
+          <div class="field">
+            <div class="label-row"><label for="operation">Maths skill</label></div>
+            <select id="operation">
+              <option value="addition">Column addition</option>
+              <option value="subtraction">Column subtraction</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="label-row"><label for="number-length">Number length</label></div>
+            <select id="number-length">
+              <option value="10s">10s · two-digit numbers</option>
+              <option value="100s">100s · three-digit numbers</option>
+              <option value="1000s">1,000s · four-digit numbers</option>
+              <option value="random">Random · 10s to 1,000s</option>
+            </select>
+          </div>
+          <div class="field">
+            <div class="label-row"><span class="field-label">Exchange method</span></div>
+            <div class="exchange-select">
+              <span class="exchange-copy"><strong>Include exchanging</strong><small>At least half the questions will need carrying or borrowing.</small></span>
+              <label class="switch" aria-label="Include questions that need exchanging"><input id="exchange" type="checkbox"><span class="switch-track"></span></label>
+            </div>
+          </div>
+          <fieldset class="field" style="border:0;padding:0;margin-left:0;margin-right:0">
+            <div class="label-row"><legend class="field-label">Number of questions</legend><span class="field-hint">Choose 4–20</span></div>
+            <div class="count-options" id="count-options" aria-label="Number of questions"></div>
+          </fieldset>
+          <div class="field">
+            <div class="label-row"><span class="field-label">Worksheet artwork</span><span class="field-hint">Just for fun</span></div>
+            <div class="art-select">
+              <div class="art-info"><span class="art-icon" aria-hidden="true">🦕</span><span class="art-copy"><strong>Dinosaurs</strong><small>A dino friend on the page</small></span></div>
+              <label class="switch" aria-label="Add dinosaur artwork"><input id="dinosaurs" type="checkbox" checked><span class="switch-track"></span></label>
+            </div>
+          </div>
+          <button class="print-button" id="print-button" type="button"><span class="print-icon" aria-hidden="true">⎙</span> Print worksheet</button>
+          <button class="copy-button" id="copy-button" type="button"><span aria-hidden="true">↗</span> Copy worksheet link</button>
+          <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
+        </div>
+        <div class="side-foot"><span aria-hidden="true">✿</span><span>Every worksheet is a brand-new set of sums, ready for little learners.</span></div>
+      </section>
+      <section class="preview-area" aria-label="Worksheet preview">
+        <div class="preview-header"><span class="preview-title">YOUR WORKSHEET</span><span class="live-badge"><i class="live-dot"></i> Live preview</span></div>
+        <article class="worksheet" id="worksheet">
+          <div class="sheet-topline"></div>
+          <header class="worksheet-heading">
+            <div><div class="sheet-kicker">Little sums · maths practice</div><h2 id="sheet-title">Column Addition</h2><p class="sheet-subtitle" id="sheet-subtitle">Line up the numbers. Add them together!</p></div>
+            <svg class="dino-art" id="dino-art" viewBox="0 0 130 96" role="img" aria-label="A friendly green dinosaur">
+              <ellipse cx="68" cy="81" rx="43" ry="7" fill="#eaf0e5"/>
+              <path d="M29 65c-13 1-20-5-22-12 9 4 15 3 19-3" fill="none" stroke="#63946a" stroke-width="7" stroke-linecap="round"/>
+              <path d="M39 43 32 31l14 5 4-16 11 14 12-13 2 17c18 5 27 18 26 33l-1 11H40l-5-17z" fill="#83b983" stroke="#527e5c" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="m55 35-7-12 14 8m7 1 7-15 5 18m7 3 13-8-2 16" fill="#f1c867" stroke="#527e5c" stroke-width="2" stroke-linejoin="round"/>
+              <ellipse cx="83" cy="47" rx="3.2" ry="4" fill="#344a37"/><circle cx="84" cy="46" r="1" fill="white"/>
+              <path d="M91 59c-6 7-13 7-18 3" fill="none" stroke="#527e5c" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="97" cy="56" r="4" fill="#e98a73" opacity=".8"/>
+              <path d="M47 77v4m16-4v4m16-4v4" stroke="#527e5c" stroke-width="3" stroke-linecap="round"/>
+              <path d="M107 31c2-5 5-7 9-8m-5 13c4-3 8-3 12-2" fill="none" stroke="#e6bd59" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </header>
+          <div class="student-fields"><span>Name <i class="write-line"></i></span><span>Date <i class="write-line date"></i></span></div>
+          <div class="questions" id="questions" aria-live="polite"></div>
+          <footer class="sheet-footer"><span>Take your time and show your working.</span><span class="footer-dots">● ● ●</span></footer>
+        </article>
+      </section>
+    </div>
+  </main>
+  <script>
+    (() => {
+      const countOptions = document.getElementById('count-options');
+      const questionsEl = document.getElementById('questions');
+      const operationEl = document.getElementById('operation');
+      const lengthEl = document.getElementById('number-length');
+      const dinoEl = document.getElementById('dinosaurs');
+      const exchangeEl = document.getElementById('exchange');
+      const copyStatus = document.getElementById('copy-status');
+      const sheetTitle = document.getElementById('sheet-title');
+      const sheetSubtitle = document.getElementById('sheet-subtitle');
+      const dinoArt = document.getElementById('dino-art');
+      let sums = [];
+
+      const params = new URLSearchParams(window.location.search);
+      const validLengths = ['10s', '100s', '1000s', 'random'];
+      const requestedCount = Number(params.get('count'));
+      if (['addition', 'subtraction'].includes(params.get('operation'))) operationEl.value = params.get('operation');
+      if (validLengths.includes(params.get('length'))) lengthEl.value = params.get('length');
+      if (Number.isInteger(requestedCount) && requestedCount >= 4 && requestedCount <= 20) {
+        document.documentElement.dataset.initialCount = String(requestedCount);
+      }
+      if (params.has('dinosaurs')) dinoEl.checked = params.get('dinosaurs') !== 'false';
+      if (params.has('exchange')) exchangeEl.checked = params.get('exchange') === 'true';
+
+      for (let n = 4; n <= 20; n++) {
+        const label = document.createElement('label');
+        label.className = 'count-option';
+        const input = document.createElement('input');
+        input.type = 'radio'; input.name = 'question-count'; input.value = n;
+        input.checked = n === Number(document.documentElement.dataset.initialCount || 12);
+        input.addEventListener('change', render);
+        const span = document.createElement('span'); span.textContent = n;
+        label.append(input, span); countOptions.append(label);
+      }
+
+      const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+      function hasExchange(a, b, subtract) {
+        let carryOrBorrow = 0;
+        while (a > 0 || b > 0 || carryOrBorrow) {
+          const digitA = a % 10;
+          const digitB = b % 10;
+          if (subtract) {
+            const needsBorrow = digitA - carryOrBorrow < digitB;
+            carryOrBorrow = needsBorrow ? 1 : 0;
+            if (needsBorrow) return true;
+          } else {
+            const sum = digitA + digitB + carryOrBorrow;
+            carryOrBorrow = sum >= 10 ? 1 : 0;
+            if (carryOrBorrow) return true;
+          }
+          a = Math.floor(a / 10);
+          b = Math.floor(b / 10);
+        }
+        return false;
+      }
+      function makePair(digits, subtract, requiresExchange) {
+        const min = 10 ** (digits - 1);
+        const max = (10 ** digits) - 1;
+        while (true) {
+          let a = randomInt(min, max);
+          let b = randomInt(min, max);
+          if (subtract && b > a) [a, b] = [b, a];
+          if (hasExchange(a, b, subtract) === requiresExchange) return { a, b };
+        }
+      }
+      function makeSums() {
+        const count = Number(document.querySelector('input[name="question-count"]:checked').value);
+        const subtract = operationEl.value === 'subtraction';
+        const lengths = lengthEl.value === 'random'
+          ? [2, 3, 4]
+          : [{ '10s': 2, '100s': 3, '1000s': 4 }[lengthEl.value]];
+        const exchangeCount = exchangeEl.checked ? Math.ceil(count / 2) : 0;
+        const questions = Array.from({ length: count }, (_, index) => {
+          const digits = lengths[randomInt(0, lengths.length - 1)];
+          const requiresExchange = exchangeEl.checked && index < exchangeCount;
+          return makePair(digits, subtract, requiresExchange);
+        });
+        for (let i = questions.length - 1; i > 0; i--) {
+          const j = randomInt(0, i);
+          [questions[i], questions[j]] = [questions[j], questions[i]];
+        }
+        return questions;
+      }
+      function syncUrl() {
+        const selectedCount = document.querySelector('input[name="question-count"]:checked').value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('operation', operationEl.value);
+        url.searchParams.set('count', selectedCount);
+        url.searchParams.set('length', lengthEl.value);
+        url.searchParams.set('exchange', String(exchangeEl.checked));
+        url.searchParams.set('dinosaurs', String(dinoEl.checked));
+        window.history.replaceState(null, '', url);
+      }
+      function render() {
+        const subtract = operationEl.value === 'subtraction';
+        const symbol = subtract ? '−' : '+';
+        const title = subtract ? 'Column Subtraction' : 'Column Addition';
+        sheetTitle.textContent = title;
+        sheetSubtitle.textContent = subtract ? 'Line up the numbers. Take one away!' : 'Line up the numbers. Add them together!';
+        dinoArt.hidden = !dinoEl.checked;
+        sums = makeSums();
+        const printColumns = Math.min(4, Math.ceil(Math.sqrt(sums.length)));
+        questionsEl.style.setProperty('--print-columns', printColumns);
+        questionsEl.style.setProperty('--print-rows', Math.ceil(sums.length / printColumns));
+        syncUrl();
+        questionsEl.replaceChildren(...sums.map(({a,b}, index) => {
+          const card = document.createElement('div'); card.className = 'question';
+          const number = document.createElement('span'); number.className = 'question-num'; number.textContent = String(index + 1).padStart(2, '0');
+          const sum = document.createElement('div'); sum.className = 'sum';
+          const largestOperandLength = Math.max(String(a).length, String(b).length);
+          const availableFontSize = sums.length <= 6 ? 28 : sums.length <= 12 ? 25 : sums.length <= 16 ? 21 : 18;
+          const sumFontSize = Math.max(18, availableFontSize - (largestOperandLength - 2) * 2);
+          sum.style.setProperty('--sum-font-cqw', `${sumFontSize / 6}cqw`);
+          sum.style.setProperty('--sum-font-print', `${sumFontSize}pt`);
+          const rowA = document.createElement('div'); rowA.className = 'sum-row';
+          const blank = document.createElement('span'); blank.className = 'sum-sign';
+          const numA = document.createElement('span'); numA.className = 'sum-number'; numA.textContent = a;
+          rowA.append(blank, numA);
+          const rowB = document.createElement('div'); rowB.className = 'sum-row';
+          const sign = document.createElement('span'); sign.className = 'sum-sign'; sign.textContent = symbol;
+          const numB = document.createElement('span'); numB.className = 'sum-number'; numB.textContent = b;
+          rowB.append(sign, numB);
+          const rule = document.createElement('div'); rule.className = 'sum-rule';
+          const answer = document.createElement('div'); answer.className = 'answer-space';
+          sum.append(rowA, rowB, rule, answer); card.append(number, sum); return card;
+        }));
+      }
+      operationEl.addEventListener('change', render);
+      lengthEl.addEventListener('change', render);
+      dinoEl.addEventListener('change', () => {
+        dinoArt.hidden = !dinoEl.checked;
+        syncUrl();
+      });
+      exchangeEl.addEventListener('change', render);
+      document.getElementById('print-button').addEventListener('click', () => window.print());
+      document.getElementById('copy-button').addEventListener('click', async () => {
+        syncUrl();
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+        } catch {
+          const input = document.createElement('textarea');
+          input.value = window.location.href;
+          input.style.position = 'fixed'; input.style.opacity = '0';
+          document.body.append(input); input.select();
+          const copied = document.execCommand('copy'); input.remove();
+          if (!copied) {
+            copyStatus.textContent = 'Copy was unavailable. You can copy the address bar link.';
+            return;
+          }
+        }
+        copyStatus.textContent = 'Worksheet link copied';
+      });
+      render();
+    })();
+  </script>
+</body>
+</html>
