@@ -10,7 +10,7 @@ Build a simple, child-friendly, single-page web app that generates printable mat
 - Question count: any whole number from 4 to 20.
 - Number length: 10s (two-digit), 100s (three-digit), 1,000s (four-digit), or random across those lengths.
 - Exchange: when disabled, every question must be solvable without carrying (addition) or borrowing (subtraction). When enabled, at least half of the questions must require carrying or borrowing.
-- Artwork: dinosaur artwork can be enabled or disabled. It belongs prominently at the top-right of the worksheet. Disabling artwork must hide it everywhere on the sheet.
+- Artwork capability is implemented for none, dinosaurs, robots, ocean, jungle, knights, Greek myths, fairies, monsters, vehicles, K-pop, and rockstars. Keep its selector hidden in the interface for now; preserve its rendering and URL support so it can be re-enabled later. When selected through a saved URL, the theme gets a prominent illustration at the top-right. None hides all artwork. If the question grid has spare cells, fill them with illustrations from different themes, never repeating the selected theme.
 
 Generate fresh questions when a question-generating option changes. Changing the artwork option must not regenerate the questions.
 
@@ -26,7 +26,7 @@ Generate fresh questions when a question-generating option changes. Changing the
 
 ## Sharing settings
 
-- Persist the selected operation, question count, number length, exchange setting, and artwork setting in URL query parameters.
+- Persist the selected operation, question count, number length, exchange setting, and artwork theme in URL query parameters.
 - The copy-link action must copy a URL that restores those selected options when opened.
 - A direct visit to the app with no query string (including its clean GitHub Pages URL) must stay free of default query parameters. Add or update settings in the URL only after the user edits a form option; copying an untouched default page must not add them.
 - Unknown or invalid query parameter values should fall back to valid defaults.
