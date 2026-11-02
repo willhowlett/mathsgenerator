@@ -7,10 +7,10 @@ Build a simple, child-friendly, single-page web app that generates printable mat
 ## Current worksheet options
 
 - Operation: column addition, column subtraction, or mixed addition and subtraction. A mixed worksheet must include both operations, with a varied question order.
-- Question count: any whole number from 4 to 20.
+- Question count: 4, 6, 9, 12, 16, or 20. These counts must fill the configured question grid exactly; do not add artwork or filler items to empty grid cells.
 - Number length: 10s (two-digit), 100s (three-digit), 1,000s (four-digit), or random across those lengths.
 - Exchange: when disabled, every question must be solvable without carrying (addition) or borrowing (subtraction). When enabled, at least half of the questions must require carrying or borrowing.
-- Artwork capability is implemented for none, dinosaurs, robots, ocean, jungle, knights, Greek myths, fairies, monsters, vehicles, K-pop, and rockstars. Keep its selector hidden in the interface for now; preserve its rendering and URL support so it can be re-enabled later. When selected through a saved URL, the theme gets a prominent illustration at the top-right. None hides all artwork. If the question grid has spare cells, fill them with illustrations from different themes, never repeating the selected theme.
+- Artwork capability is implemented for none, dinosaurs, robots, ocean, jungle, knights, Greek myths, fairies, monsters, vehicles, K-pop, and rockstars. Keep its selector hidden in the interface for now; preserve its rendering and URL support so it can be re-enabled later. When selected through a saved URL, the theme gets a prominent illustration at the top-right. None hides all artwork.
 
 Generate fresh questions when a question-generating option changes. Changing the artwork option must not regenerate the questions.
 

@@ -4,7 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f5f8ef">
-  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg?v=2" sizes="any">
+  <link rel="icon" type="image/png" href="./favicon.png?v=2" sizes="48x48">
+  <link rel="shortcut icon" href="./favicon.ico?v=2" type="image/x-icon">
   <title>Little Sums — printable maths worksheets</title>
   <style>
     :root {
@@ -103,8 +105,6 @@
     .answer-space { height: 6.2cqw; margin: 0 0 0 2.6cqw; border-bottom: 1px dashed #c8d1c5; }
     .sheet-footer { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; margin-top: 2.2cqw; padding-top: 1.1cqw; border-top: 1px solid #edf0e9; color: #9aa49a; font-size: 1.25cqw; }
     .hero-art[hidden] { display: none !important; }
-    .bonus-art { overflow: hidden; padding: 1.5cqw; border: 1px dashed #aab2aa; background: radial-gradient(ellipse at center, #f4f4f4 0%, #fff 70%); }
-    .bonus-art svg { display: block; width: 100%; height: 100%; }
     @media (max-width: 960px) {
       .app-shell { padding: 24px 25px 35px; }
       .layout { grid-template-columns: 285px minmax(0,1fr); gap: 25px; }
@@ -133,7 +133,6 @@
       .sheet-kicker { font-size: 8pt; }
       .sheet-subtitle { font-size: 9pt; }
       .hero-art { width: 38mm; height: 29mm; }
-      .bonus-art { padding: 2mm; }
       .student-fields { flex: 0 0 auto; margin: 5mm 0 6mm; font-size: 9pt; }
       .write-line { width: 42mm; }
       .write-line.date { width: 27mm; }
@@ -183,7 +182,7 @@
             </div>
           </div>
           <fieldset class="field" style="border:0;padding:0;margin-left:0;margin-right:0">
-            <div class="label-row"><legend class="field-label">Number of questions</legend><span class="field-hint">Choose 4–20</span></div>
+            <div class="label-row"><legend class="field-label">Number of questions</legend><span class="field-hint">Full grid layouts</span></div>
             <div class="count-options" id="count-options" aria-label="Number of questions"></div>
           </fieldset>
           <div class="field" id="artwork-field" hidden>
@@ -261,10 +260,11 @@
 
       const params = new URLSearchParams(window.location.search);
       const validLengths = ['10s', '100s', '1000s', 'random'];
+      const validCounts = [4, 6, 9, 12, 16, 20];
       const requestedCount = Number(params.get('count'));
       if (['addition', 'subtraction', 'mixed'].includes(params.get('operation'))) operationEl.value = params.get('operation');
       if (validLengths.includes(params.get('length'))) lengthEl.value = params.get('length');
-      if (Number.isInteger(requestedCount) && requestedCount >= 4 && requestedCount <= 20) {
+      if (validCounts.includes(requestedCount)) {
         document.documentElement.dataset.initialCount = String(requestedCount);
       }
       const requestedArtwork = params.get('artwork');
@@ -275,7 +275,7 @@
       }
       if (params.has('exchange')) exchangeEl.checked = params.get('exchange') === 'true';
 
-      for (let n = 4; n <= 20; n++) {
+      for (const n of validCounts) {
         const label = document.createElement('label');
         label.className = 'count-option';
         const input = document.createElement('input');
@@ -353,18 +353,6 @@
         const selectedTheme = artworkEl.value;
         heroArt.innerHTML = selectedTheme === 'none' ? '' : artworkSvg(selectedTheme);
         heroArt.hidden = selectedTheme === 'none';
-        questionsEl.querySelectorAll('.bonus-art').forEach((art) => art.remove());
-        if (selectedTheme === 'none' || !sums.length) return;
-
-        const columns = Math.min(4, Math.ceil(Math.sqrt(sums.length)));
-        const spaces = (columns - (sums.length % columns)) % columns;
-        const bonusThemes = artworkThemes.filter((theme) => theme !== selectedTheme).slice(0, spaces);
-        bonusThemes.forEach((theme) => {
-          const card = document.createElement('div');
-          card.className = 'question bonus-art';
-          card.innerHTML = artworkSvg(theme);
-          questionsEl.append(card);
-        });
       }
       function handleOptionChange() {
         render();
