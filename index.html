@@ -6,160 +6,7 @@
   <meta name="theme-color" content="#f5f8ef">
   <link rel="icon" type="image/svg+xml" href="./favicon.svg?v=7" sizes="any">
   <title>Little Sums — printable maths worksheets</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --ink: #27342c;
-      --muted: #718074;
-      --green: #426b4f;
-      --green-dark: #31583d;
-      --mint: #e6efdf;
-      --paper: #fffefa;
-      --line: #e2e8dc;
-      --coral: #e78368;
-      --yellow: #f4cd71;
-      --shadow: 0 18px 55px rgba(56, 77, 57, .09);
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #f5f8ef;
-      color: var(--ink);
-      font-family: ui-rounded, "Avenir Next", Avenir, "Segoe UI", sans-serif;
-      -webkit-font-smoothing: antialiased;
-    }
-    button, select { font: inherit; }
-    .app-shell { max-width: 1280px; margin: 0 auto; padding: 26px 38px 40px; }
-    .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
-    .brand { display: inline-flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-weight: 800; font-size: 19px; letter-spacing: -.5px; }
-    .brand-mark { display: block; width: 36px; height: 36px; flex: 0 0 auto; }
-    .top-note { color: var(--muted); font-size: 13px; font-weight: 600; }
-    .layout { display: grid; grid-template-columns: 330px minmax(0, 1fr); gap: 44px; align-items: start; }
-    .sidebar { padding-top: 5px; }
-    .eyebrow { color: #73927a; font-size: 11px; font-weight: 800; letter-spacing: 1.35px; text-transform: uppercase; }
-    h1 { margin: 12px 0 11px; max-width: 340px; font-size: clamp(32px, 3.7vw, 40px); line-height: 1.06; letter-spacing: -1.9px; }
-    .intro { margin: 0 0 28px; max-width: 310px; color: var(--muted); font-size: 15px; line-height: 1.6; }
-    .controls-card { padding: 22px; border: 1px solid #e6ecdf; border-radius: 19px; background: rgba(255,255,255,.72); box-shadow: 0 8px 24px rgba(59,82,56,.035); }
-    .field { margin-bottom: 20px; }
-    .field:last-of-type { margin-bottom: 22px; }
-    .label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
-    label, .field-label { display: block; color: #37453b; font-size: 13px; font-weight: 750; }
-    .field-hint { color: #9aa69a; font-size: 11px; }
-    select { width: 100%; height: 44px; padding: 0 50px 0 13px; border: 1px solid #dce4d8; border-radius: 10px; outline: none; appearance: none; -webkit-appearance: none; background-color: #fff; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m3 6 5 5 5-5' fill='none' stroke='%2337433a' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 18px center; background-size: 16px; color: var(--ink); font-size: 14px; font-weight: 650; cursor: pointer; }
-    select:focus { border-color: #84a98b; box-shadow: 0 0 0 3px rgba(91,139,99,.13); }
-    .count-options { display: grid; grid-template-columns: repeat(6,1fr); gap: 6px; }
-    .count-option { position: relative; }
-    .count-option input { position: absolute; opacity: 0; pointer-events: none; }
-    .count-option span { height: 35px; display: grid; place-items: center; border: 1px solid #dfe6db; border-radius: 8px; background: white; color: #64736a; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s ease; }
-    .count-option input:checked + span { border-color: var(--green); background: var(--green); color: white; box-shadow: 0 3px 8px rgba(49,88,61,.17); }
-    .count-option input:focus-visible + span { outline: 3px solid rgba(91,139,99,.25); }
-    .artwork-select { display: flex; align-items: center; min-height: 55px; padding: 5px 10px; border: 1px solid #dfe6db; border-radius: 10px; background: white; }
-    .artwork-select select { border: 0; box-shadow: none; padding-left: 2px; }
-    .switch { position: relative; width: 38px; height: 22px; flex: 0 0 auto; }
-    .switch input { position: absolute; opacity: 0; }
-    .switch-track { position: absolute; inset: 0; border-radius: 20px; background: #d8dfd7; cursor: pointer; transition: .2s; }
-    .switch-track::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: white; box-shadow: 0 1px 3px #0002; transition: .2s; }
-    .switch input:checked + .switch-track { background: #5b8a64; }
-    .switch input:checked + .switch-track::after { transform: translateX(16px); }
-    .switch input:focus-visible + .switch-track { outline: 3px solid #a7c4aa; outline-offset: 2px; }
-    .exchange-select { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 58px; padding: 9px 11px; border: 1px solid #dfe6db; border-radius: 10px; background: white; }
-    .exchange-copy strong { display: block; color: #37453b; font-size: 13px; }
-    .exchange-copy small { display: block; max-width: 220px; margin-top: 3px; color: #8a978d; font-size: 11px; line-height: 1.35; }
-    .print-button { width: 100%; height: 48px; display: inline-flex; justify-content: center; align-items: center; gap: 9px; border: 0; border-radius: 11px; background: var(--green); color: white; font-weight: 750; font-size: 14px; box-shadow: 0 5px 12px rgba(49,88,61,.16); cursor: pointer; transition: .15s ease; }
-    .print-button:hover { background: var(--green-dark); transform: translateY(-1px); }
-    .print-button:active { transform: translateY(0); }
-    .button-icon { display: block; width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-    .action-buttons { display: flex; flex-direction: column; gap: 10px; }
-    .action-buttons button { display: grid; grid-template-columns: 20px 145px; justify-content: center; align-items: center; column-gap: 12px; }
-    .button-label { text-align: left; white-space: nowrap; }
-    .regenerate-button { width: 100%; min-height: 43px; display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid #dfe6db; border-radius: 10px; background: #fff; color: #526557; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s ease; }
-    .regenerate-button:hover { border-color: #a9bda8; background: #f8fbf6; }
-    .regenerate-button:focus-visible { outline: 3px solid rgba(91,139,99,.2); outline-offset: 2px; }
-    .copy-button { width: 100%; min-height: 42px; display: inline-flex; justify-content: center; align-items: center; gap: 8px; border: 1px solid #dfe6db; border-radius: 10px; background: #fff; color: #526557; font-size: 13px; font-weight: 700; cursor: pointer; transition: .15s ease; }
-    .copy-button:hover { border-color: #a9bda8; background: #f8fbf6; }
-    .copy-button:focus-visible { outline: 3px solid rgba(91,139,99,.2); outline-offset: 2px; }
-    .copy-status { min-height: 16px; margin: 6px 0 -4px; color: #628368; text-align: center; font-size: 11px; }
-    .answer-toggle { display: flex; align-items: center; justify-content: flex-end; gap: 7px; margin: 10px 2px 0; color: #65736a; font-size: 12px; font-weight: 600; cursor: pointer; }
-    .answer-toggle input { width: 14px; height: 14px; margin: 0; accent-color: var(--green); }
-    .side-foot { display: flex; gap: 8px; align-items: center; margin: 17px 4px 0; color: #89978c; font-size: 11px; line-height: 1.45; }
-    .side-foot span:first-child { font-size: 15px; }
-    .preview-area { min-width: 0; }
-    .preview-header { display: flex; justify-content: space-between; align-items: center; margin: 4px 2px 11px; }
-    .preview-title { color: #65766a; font-size: 12px; font-weight: 750; letter-spacing: .2px; }
-    .live-badge { display: inline-flex; align-items: center; gap: 6px; color: #7d8d80; font-size: 11px; font-weight: 650; }
-    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #79a87f; }
-    .worksheet { position: relative; container-type: inline-size; display: flex; flex-direction: column; width: 100%; max-width: 680px; aspect-ratio: 210 / 297; min-height: 0; margin: 0 auto; overflow: hidden; padding: 9.52% 10% 8.57%; border: 1px solid #ebede6; border-radius: 6px; background: var(--paper); box-shadow: var(--shadow); filter: grayscale(1); }
-    .answer-sheet { display: none !important; }
-    .sheet-topline { height: 5px; position: absolute; inset: 0 0 auto; background: linear-gradient(90deg,#7daa78 0 24%,#f4cd71 24% 48%,#e78368 48% 72%,#a6bd92 72%); }
-    .worksheet-heading { display: flex; flex: 0 0 auto; align-items: flex-start; justify-content: space-between; gap: 3%; padding-bottom: 2.86%; border-bottom: 1px solid #e8ece3; }
-    .sheet-kicker { margin-bottom: .8cqw; color: #7c9b7b; font-size: 1.3cqw; font-weight: 850; letter-spacing: .2cqw; text-transform: uppercase; }
-    .worksheet h2 { margin: 0; color: #29382d; font-family: Georgia, "Times New Roman", serif; font-size: 4.37cqw; line-height: 1.05; letter-spacing: -.06cqw; }
-    .sheet-subtitle { margin: 1cqw 0 0; color: #8a978d; font-size: 1.51cqw; }
-    .hero-art { width: 18cqw; height: 13.5cqw; flex: 0 0 auto; margin-top: -.7cqw; }
-    .hero-art svg { display: block; width: 100%; height: 100%; }
-    .student-fields { display: flex; flex: 0 0 auto; gap: 13.8cqw; margin: 2.4cqw 0 2.86cqw; color: #65736a; font-size: 1.4cqw; font-weight: 650; }
-    .write-line { display: inline-block; width: 20cqw; margin-left: .85cqw; border-bottom: 1px solid #bdc8ba; transform: translateY(2px); }
-    .write-line.date { width: 12.86cqw; }
-    .questions { display: grid; flex: 1 1 0; min-height: 0; grid-template-columns: repeat(var(--print-columns, 4), minmax(0,1fr)); grid-template-rows: repeat(var(--print-rows, 1), minmax(0,1fr)); gap: 2.38cqw 1.9cqw; }
-    .answers { display: grid; flex: 1 1 0; min-height: 0; grid-template-columns: minmax(0,1fr); align-content: start; margin-top: 2cqw; }
-    .answer-item { display: grid; grid-template-columns: 5cqw 1fr; align-items: center; min-height: 9cqw; padding: 0 1cqw; border-bottom: 1px solid #e6eae1; }
-    .answer-item-number { color: #7f8b80; font-size: 1.5cqw; font-weight: 700; }
-    .answer-item-value { color: #29372d; font-family: "Courier New", monospace; font-size: 2.8cqw; font-weight: 700; }
-    .question { position: relative; display: flex; min-height: 0; align-items: center; justify-content: center; padding: 1.43cqw .95cqw; border: 1px solid #e6eae1; border-radius: 1.13cqw; background: #fff; }
-    .question-num { position: absolute; top: .95cqw; left: 1.2cqw; color: #a5b0a3; font-size: 1.2cqw; font-weight: 700; }
-    .sum { width: 12.5cqw; margin: 0 auto; color: #29372d; font-family: "Courier New", monospace; font-size: var(--sum-font-cqw, 3cqw); font-weight: 700; line-height: 1.25; }
-    .sum-row { display: grid; grid-template-columns: 4cqw 1fr; align-items: center; }
-    .sum-sign { text-align: left; color: #719078; }
-    .sum-number { text-align: right; letter-spacing: 1px; }
-    .sum-rule { height: 2px; margin: .55cqw 0 0 4cqw; background: #66776a; }
-    .answer-space { height: 6.2cqw; margin: 0 0 0 4cqw; border-bottom: 1px dashed #c8d1c5; }
-    .sheet-footer { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; margin-top: 2.2cqw; padding-top: 1.1cqw; border-top: 1px solid #edf0e9; color: #9aa49a; font-size: 1.25cqw; }
-    .hero-art[hidden] { display: none !important; }
-    @media (max-width: 960px) {
-      .app-shell { padding: 24px 25px 35px; }
-      .layout { grid-template-columns: 285px minmax(0,1fr); gap: 25px; }
-    }
-    @media (max-width: 700px) {
-      .app-shell { padding: 17px 15px 28px; }
-      .topbar { margin-bottom: 22px; }
-      .top-note { font-size: 11px; }
-      .layout { grid-template-columns: 1fr; gap: 25px; }
-      .sidebar { padding: 0; }
-      h1 { font-size: 36px; max-width: none; }
-      .intro { max-width: 520px; margin-bottom: 20px; }
-      .controls-card { padding: 18px; }
-    }
-    @media (max-width: 390px) { .top-note { display: none; } }
-    @media print {
-      @page { size: A4 portrait; margin: 0; }
-      body { background: white; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-      .app-shell { width: auto; max-width: none; padding: 0; }
-      .topbar, .sidebar, .preview-header { display: none !important; }
-      .layout { display: block; }
-      .worksheet { width: 210mm; max-width: none; min-height: 0; height: 297mm; aspect-ratio: auto; margin: 0 auto; padding: 20mm 21mm 18mm; border: 0; border-radius: 0; box-shadow: none; overflow: hidden; }
-      .answer-sheet.is-included { display: flex !important; break-before: page; page-break-before: always; }
-      .sheet-topline { height: 4px; }
-      .worksheet-heading { flex: 0 0 auto; padding-bottom: 6mm; }
-      .worksheet h2 { font-size: 26pt; }
-      .sheet-kicker { font-size: 8pt; }
-      .sheet-subtitle { font-size: 9pt; }
-      .hero-art { width: 38mm; height: 29mm; }
-      .student-fields { flex: 0 0 auto; margin: 5mm 0 6mm; font-size: 9pt; }
-      .write-line { width: 42mm; }
-      .write-line.date { width: 27mm; }
-      .questions { flex: 1 1 0; min-height: 0; grid-template-columns: repeat(var(--print-columns), minmax(0,1fr)); grid-template-rows: repeat(var(--print-rows), minmax(0,1fr)); gap: 5mm 4mm; }
-      .answers { flex: 1 1 0; min-height: 0; margin-top: 6mm; }
-      .answer-item { grid-template-columns: 15mm 1fr; min-height: 10mm; padding: 0 2mm; border-color: #dfe5db; }
-      .answer-item-number { font-size: 9pt; }
-      .answer-item-value { font-size: 17pt; }
-      .question { display: flex; align-items: center; justify-content: center; min-height: 0; height: 100%; padding: 3mm 2mm; border-color: #dfe5db; break-inside: avoid; }
-      .question-num { top: 2mm; left: 2.5mm; font-size: 7pt; }
-      .sum { margin: 0 auto; font-size: var(--sum-font-print, 18pt); }
-      .answer-space { height: 13mm; }
-      .sheet-footer { flex: 0 0 auto; margin-top: 6mm; padding-top: 3mm; font-size: 7pt; }
-    }
-  </style>
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
   <main class="app-shell">
@@ -171,33 +18,26 @@
       <section class="sidebar" aria-labelledby="page-title">
         <div class="eyebrow">Print-ready practice</div>
         <h1 id="page-title">Maths Worksheets <br/>for everyone.</h1>
-        <p class="intro">Create a fresh worksheet in seconds. Pick a skill, choose how many sums, then print and get practising.</p>
+        <p class="intro">Choose the sums to practise, then print a fresh worksheet.</p>
         <div class="controls-card">
-          <div class="field">
-            <div class="label-row"><label for="operation">Maths skill</label></div>
-            <select id="operation">
-              <option value="addition">Column addition</option>
-              <option value="subtraction">Column subtraction</option>
-              <option value="mixed">Mixed addition &amp; subtraction</option>
-            </select>
-          </div>
-          <div class="field">
-            <div class="label-row"><label for="number-length">Number length</label></div>
-            <select id="number-length">
-              <option value="10s">10s · two-digit numbers</option>
-              <option value="100s">100s · three-digit numbers</option>
-              <option value="1000s">1,000s · four-digit numbers</option>
-              <option value="random">Random · 10s to 1,000s</option>
-            </select>
-          </div>
-          <div class="field">
+          <fieldset class="field count-fieldset choice-fieldset">
+            <legend class="field-label">Operations</legend>
+            <div class="count-options operation-options" id="operation-options" aria-label="Operations to include"></div>
+            <small class="choice-hint">Choose any operations, or leave all unchecked to include every operation.</small>
+          </fieldset>
+          <fieldset class="field count-fieldset choice-fieldset">
+            <legend class="field-label">Number lengths</legend>
+            <div class="count-options length-options" id="length-options" aria-label="Number lengths"></div>
+            <small class="choice-hint">Choose any lengths, or leave all unchecked to include every length.</small>
+          </fieldset>
+          <div class="field" id="exchange-field">
             <div class="label-row"><span class="field-label">Exchange method</span></div>
             <div class="exchange-select">
-              <span class="exchange-copy"><strong>Include exchanging</strong><small>At least half the questions will need carrying or borrowing.</small></span>
+              <span class="exchange-copy"><strong>Include exchanging</strong><small>At least half the questions will need carrying, borrowing or regrouping.</small></span>
               <label class="switch" aria-label="Include questions that need exchanging"><input id="exchange" type="checkbox"><span class="switch-track"></span></label>
             </div>
           </div>
-          <fieldset class="field" style="border:0;padding:0;margin-left:0;margin-right:0">
+          <fieldset class="field count-fieldset">
             <div class="label-row"><legend class="field-label">Number of questions</legend></div>
             <div class="count-options" id="count-options" aria-label="Number of questions"></div>
           </fieldset>
@@ -228,7 +68,7 @@
           <label class="answer-toggle" for="include-answers"><span>Include answer sheet</span><input id="include-answers" type="checkbox"></label>
           <p class="copy-status" id="copy-status" role="status" aria-live="polite"></p>
         </div>
-        <div class="side-foot"><span aria-hidden="true">✿</span><span>Every worksheet is a brand-new set of sums, ready for little learners.</span></div>
+        <div class="side-foot"><span aria-hidden="true">✿</span><span>Every worksheet is a fresh set of questions, ready for little learners.</span></div>
       </section>
       <section class="preview-area" aria-label="Worksheet preview">
         <div class="preview-header"><span class="preview-title">YOUR WORKSHEET</span><span class="live-badge"><i class="live-dot"></i> Live preview</span></div>
@@ -253,276 +93,6 @@
       </section>
     </div>
   </main>
-  <script>
-    (() => {
-      const countOptions = document.getElementById('count-options');
-      const questionsEl = document.getElementById('questions');
-      const operationEl = document.getElementById('operation');
-      const lengthEl = document.getElementById('number-length');
-      const artworkEl = document.getElementById('artwork');
-      const exchangeEl = document.getElementById('exchange');
-      const answerToggle = document.getElementById('include-answers');
-      const answerSheet = document.getElementById('answer-sheet');
-      const answersEl = document.getElementById('answers');
-      const answerSubtitle = document.getElementById('answer-subtitle');
-      const copyStatus = document.getElementById('copy-status');
-      const sheetTitle = document.getElementById('sheet-title');
-      const sheetSubtitle = document.getElementById('sheet-subtitle');
-      const heroArt = document.getElementById('hero-art');
-      const artworkNames = {
-        dinosaurs: 'Dinosaurs', robots: 'Robots', ocean: 'Ocean', jungle: 'Jungle',
-        knights: 'Knights', 'greek-myths': 'Greek myths', fairies: 'Fairies',
-        monsters: 'Monsters', vehicles: 'Vehicles', 'k-pop': 'K-pop', rockstars: 'Rockstars'
-      };
-      const artworkThemes = Object.keys(artworkNames);
-      const artworkScenes = {
-        dinosaurs: `<path d="M43 91Q24 94 13 75Q29 83 45 72" fill="#c9c9c9"/><ellipse cx="83" cy="91" rx="40" ry="24" fill="#dedede"/><path d="M91 80Q105 62 104 43Q103 20 126 18Q149 17 154 37L170 43Q178 46 174 55L155 60Q150 75 135 77L116 70L105 90Z" fill="#d5d5d5"/><path d="M57 70l5-17 11 14 8-20 10 19 10-17 7 23" fill="#bcbcbc"/><path d="M58 105l-2 13h19l4-13m20-1 2 14h18l2-16" fill="#c7c7c7"/><circle cx="143" cy="39" r="3" fill="#222"/><path d="M151 53l-7 2m-16 7 4 4m-25 10 4 3m-17 1 4 3" fill="none"/><path d="M23 42l4-9 4 9 9 4-9 3-4 9-4-9-9-3z" fill="#fff"/>`,
-        robots: `<path d="M78 36V23m0 0-10-8m10 8 10-8" fill="none"/><circle cx="78" cy="14" r="5" fill="#bcbcbc"/><rect x="46" y="35" width="65" height="48" rx="12" fill="#d7d7d7"/><path d="M57 50h12m19 0h12" stroke-width="5"/><path d="M67 67q11 10 23 0" fill="none"/><rect x="54" y="86" width="49" height="30" rx="6" fill="#c4c4c4"/><circle cx="69" cy="100" r="4" fill="#fff"/><circle cx="87" cy="100" r="4" fill="#fff"/><path d="M45 46H31v37h13m68-37h14v37h-13M65 116v7m28-7v7" fill="none"/><path d="M27 29l4-9 4 9 9 4-9 4-4 9-4-9-9-4z" fill="#eee"/>`,
-        ocean: `<path d="M34 77q9-28 39-26 16 1 29 14 18-7 37-1l21 12-22 12q-21 5-39-5-30 23-58-6z" fill="#d2d2d2"/><path d="M45 81q27 10 51-9m8-7q7-7 5-17 12 7 13 19m-16 26q-12 14-23 8" fill="none"/><circle cx="128" cy="72" r="3" fill="#222"/><path d="M23 103q12-11 24 0t24 0 24 0 24 0 24 0 24 0M28 116q12-11 24 0t24 0 24 0 24 0 24 0" fill="none"/><path d="M58 38q-4-11 3-17m10 17q-3-14 5-20m62 50l7-7 7 7-7 7z" fill="#eee"/><path d="M28 65l8-6 8 6-8 6z" fill="#c3c3c3"/>`,
-        jungle: `<path d="M37 26Q22 42 31 63m0 0q9 11 20 0m-20 0q-10 12-16 3" fill="none"/><circle cx="65" cy="72" r="25" fill="#d5d5d5"/><circle cx="46" cy="48" r="13" fill="#d5d5d5"/><circle cx="84" cy="48" r="13" fill="#d5d5d5"/><ellipse cx="65" cy="77" rx="15" ry="12" fill="#f5f5f5"/><circle cx="56" cy="68" r="3" fill="#222"/><circle cx="74" cy="68" r="3" fill="#222"/><path d="M60 80q5 5 10 0m-5 10v18m0-9-14 9m14-9 14 9" fill="none"/><path d="M111 109Q90 70 115 34q22 34 2 75zm18 2q-7-37 18-58 12 39-9 62zM22 112Q8 80 29 58q15 32 1 55z" fill="#c8c8c8"/><path d="M115 35v76m17-2 15-55M29 59v52" fill="none"/>`,
-        knights: `<path d="M72 36Q47 25 55 12q19 0 28 20 12-13 29-12 1 15-17 24" fill="#c6c6c6"/><path d="M55 44q22-17 46 0l-3 42H58z" fill="#d9d9d9"/><path d="M57 48l21-9 21 9-5 25H62z" fill="#efefef"/><path d="M64 55h8m14 0h8m-22 13h14" fill="none"/><path d="M64 85 53 119h18l9-24 10 24h18L96 85" fill="#c8c8c8"/><path d="M112 43l23-26m-29 36 27-30m-31 17 12 11" fill="none" stroke-width="4"/><path d="M35 63l20-7v35L35 99z" fill="#bcbcbc"/><path d="M41 68l5 7 7-2-4 7 3 7-8-3-7 5 1-9-6-5 8-1z" fill="#f8f8f8"/>`,
-        'greek-myths': `<ellipse cx="79" cy="84" rx="35" ry="19" fill="#d3d3d3"/><path d="M50 78Q35 61 45 49q12 2 20 22m42 3q17-22 33-14l-17 23m-66-5Q42 59 54 46q15 10 18 25 12-28 30-29 7 15-6 31" fill="#e4e4e4"/><path d="M105 75q10-10 12-25l15-10 17 7-12 10-10 1q-5 16-19 25m-57 1-11 31h16l12-23m30-1 13 24h15l-10-31" fill="#cecece"/><path d="M131 45l5-8 6 8m-14 2 8-5m-52 52q-8 2-12 9" fill="none"/><path d="M27 33h20m-16 0v34m12-34v34M18 68h38m70 37h25m-20-7v-22m14 22V76m-25 24h38" fill="none"/>`,
-        fairies: `<path d="M82 70Q44 32 36 59q-4 17 35 22-31 11-21 27 11 15 36-20 26 34 38 20 11-14-21-27 39-5 34-22-8-26-44 11z" fill="#e1e1e1"/><circle cx="82" cy="51" r="12" fill="#d0d0d0"/><path d="M72 65q10-8 20 0l12 37-22 15-22-15z" fill="#c8c8c8"/><path d="M82 46q-15-12-6-22 10 6 8 16 9-15 19-10-2 14-13 20m-8 34q7 6 14 0m13-52 6-10 2 12 10 6-12 2-6 10-2-12-10-6z" fill="none"/><path d="M31 37l4-9 4 9 9 4-9 4-4 9-4-9-9-4zM131 66l3-7 3 7 7 3-7 3-3 7-3-7-7-3z" fill="#eee"/>`,
-        monsters: `<path d="M50 45 38 26l23 8q17-12 37 0l23-8-12 23q12 20 4 45-9 27-39 27T35 94q-8-28 15-49z" fill="#d2d2d2"/><path d="M56 62q10-10 19 0m12 0q10-10 19 0" fill="none" stroke-width="4"/><circle cx="64" cy="63" r="3" fill="#222"/><circle cx="95" cy="63" r="3" fill="#222"/><path d="M61 84q20 19 40 0l-5 19H67z" fill="#f8f8f8"/><path d="M70 87v10m11-8v12m11-12v9m-34 22-6 6m55-6 6 6" fill="none"/><circle cx="43" cy="73" r="5" fill="#eee"/><circle cx="117" cy="73" r="5" fill="#eee"/><path d="M71 38q-6-12 5-19 11 8 5 19m12-1q-4-13 9-18 8 11-2 20" fill="#c4c4c4"/>`,
-        vehicles: `<path d="M48 88 57 57q3-10 15-10h22q11 0 17 12l14 29v21H45V91z" fill="#cecece"/><path d="M65 58h29q8 0 12 9l5 12H59l3-13q1-8 3-8z" fill="#f8f8f8"/><circle cx="63" cy="106" r="10" fill="#fff"/><circle cx="111" cy="106" r="10" fill="#fff"/><circle cx="63" cy="106" r="4" fill="#777"/><circle cx="111" cy="106" r="4" fill="#777"/><path d="M42 39 66 18l20 21v29H42z" fill="#d8d8d8"/><path d="M66 18v50m-24-29h44m-22-21-10 21h20z" fill="#fff"/><path d="M24 53h11m-7 8h12m104-42 4-9 4 9 9 4-9 4-4 9-4-9-9-4z" fill="#eee"/>`,
-        'k-pop': `<path d="M82 42q-17 0-18 20l-4 23-18 18 12 7 22-17 7-22 7 22 23 17 12-7-19-18-4-23q-2-20-20-20z" fill="#d1d1d1"/><circle cx="82" cy="28" r="16" fill="#d4d4d4"/><path d="M66 25q1-21 20-18 16 3 12 21l-8-10-12 7-10-1m-13 23-17-11m64 0 20-14" fill="#bdbdbd"/><path d="M44 40l-10-6m78-1 10-9m-40 78v15m-18-5 18 8 18-8" fill="none"/><path d="M130 59l5-12 5 12 12 5-12 5-5 12-5-12-12-5zM25 78l4-9 4 9 9 4-9 4-4 9-4-9-9-4z" fill="#eee"/><path d="M101 49l21-18m-21 22 19-17" fill="none" stroke-width="4"/>`,
-        rockstars: `<path d="M47 45l20 8-6 15 13 15-19 26-18-8 8-17-14-13z" fill="#d2d2d2"/><path d="M61 88 97 52m-32 43 35-38m-31 44 38-39" fill="none" stroke-width="5"/><path d="M92 48l18-18 22 5 7 20-19 18m-17 14 23 15-8 12-25-17m-53-22L33 45l17-6 17 14" fill="#c3c3c3"/><circle cx="125" cy="47" r="3" fill="#222"/><path d="M101 30l-8-13 12 2 7-10 5 13m15 69 10-4m-5 11 10 3" fill="none"/><path d="M25 27l4-9 4 9 9 4-9 4-4 9-4-9-9-4z" fill="#eee"/>`
-      };
-      let sums = [];
-
-      const params = new URLSearchParams(window.location.search);
-      const validLengths = ['10s', '100s', '1000s', 'random'];
-      const validCounts = [4, 6, 9, 12, 16, 20];
-      function decodeSharedState(hash) {
-        if (!hash || hash.length < 2) return null;
-        try {
-          let token = hash.slice(1).replace(/-/g, '+').replace(/_/g, '/');
-          token += '='.repeat((4 - token.length % 4) % 4);
-          const state = JSON.parse(atob(token));
-          if (![1, 2].includes(state.v) || !['addition', 'subtraction', 'mixed'].includes(state.operation)) return null;
-          if (state.v === 2 && typeof state.includeAnswers !== 'boolean') return null;
-          if (!validCounts.includes(state.count) || !validLengths.includes(state.length)) return null;
-          if (typeof state.exchange !== 'boolean' || !['none', ...artworkThemes].includes(state.artwork)) return null;
-          if (!Array.isArray(state.questions) || state.questions.length !== state.count) return null;
-          const expectedDigits = state.length === 'random' ? null : { '10s': 2, '100s': 3, '1000s': 4 }[state.length];
-          const questions = state.questions.map((question) => {
-            if (!Array.isArray(question) || question.length !== 3) return null;
-            const [a, b, subtract] = question;
-            if (!Number.isInteger(a) || !Number.isInteger(b) || typeof subtract !== 'boolean') return null;
-            if (a < 10 || b < 10 || a > 9999 || b > 9999 || (subtract && b > a)) return null;
-            const digitsA = String(a).length;
-            const digitsB = String(b).length;
-            if (expectedDigits && (digitsA !== expectedDigits || digitsB !== expectedDigits)) return null;
-            if (!expectedDigits && (digitsA < 2 || digitsA > 4 || digitsB < 2 || digitsB > 4)) return null;
-            if (state.operation === 'addition' && subtract) return null;
-            if (state.operation === 'subtraction' && !subtract) return null;
-            return { a, b, subtract };
-          });
-          if (questions.some((question) => question === null)) return null;
-          const exchangeQuestions = questions.filter(({ a, b, subtract }) => hasExchange(a, b, subtract)).length;
-          if (state.exchange ? exchangeQuestions < Math.ceil(state.count / 2) : exchangeQuestions > 0) return null;
-          if (state.operation === 'mixed' && (!questions.some(({ subtract }) => !subtract) || !questions.some(({ subtract }) => subtract))) return null;
-          return { ...state, includeAnswers: state.includeAnswers === true, questions };
-        } catch {
-          return null;
-        }
-      }
-      const sharedState = decodeSharedState(window.location.hash);
-      const requestedCount = Number(params.get('count'));
-      if (sharedState) {
-        operationEl.value = sharedState.operation;
-        lengthEl.value = sharedState.length;
-        artworkEl.value = sharedState.artwork;
-        exchangeEl.checked = sharedState.exchange;
-        answerToggle.checked = sharedState.includeAnswers;
-        document.documentElement.dataset.initialCount = String(sharedState.count);
-        sums = sharedState.questions;
-      } else {
-        if (['addition', 'subtraction', 'mixed'].includes(params.get('operation'))) operationEl.value = params.get('operation');
-        if (validLengths.includes(params.get('length'))) lengthEl.value = params.get('length');
-        if (validCounts.includes(requestedCount)) document.documentElement.dataset.initialCount = String(requestedCount);
-        const requestedArtwork = params.get('artwork');
-        if (requestedArtwork === 'none' || artworkThemes.includes(requestedArtwork)) {
-          artworkEl.value = requestedArtwork;
-        } else if (params.has('dinosaurs')) {
-          artworkEl.value = params.get('dinosaurs') === 'false' ? 'none' : 'dinosaurs';
-        }
-        if (params.has('exchange')) exchangeEl.checked = params.get('exchange') === 'true';
-      }
-
-      for (const n of validCounts) {
-        const label = document.createElement('label');
-        label.className = 'count-option';
-        const input = document.createElement('input');
-        input.type = 'radio'; input.name = 'question-count'; input.value = n;
-        input.checked = n === Number(document.documentElement.dataset.initialCount || 12);
-        input.addEventListener('change', handleOptionChange);
-        const span = document.createElement('span'); span.textContent = n;
-        label.append(input, span); countOptions.append(label);
-      }
-
-      const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-      function hasExchange(a, b, subtract) {
-        let carryOrBorrow = 0;
-        while (a > 0 || b > 0 || carryOrBorrow) {
-          const digitA = a % 10;
-          const digitB = b % 10;
-          if (subtract) {
-            const needsBorrow = digitA - carryOrBorrow < digitB;
-            carryOrBorrow = needsBorrow ? 1 : 0;
-            if (needsBorrow) return true;
-          } else {
-            const sum = digitA + digitB + carryOrBorrow;
-            carryOrBorrow = sum >= 10 ? 1 : 0;
-            if (carryOrBorrow) return true;
-          }
-          a = Math.floor(a / 10);
-          b = Math.floor(b / 10);
-        }
-        return false;
-      }
-      function makePair(digits, subtract, requiresExchange) {
-        const min = 10 ** (digits - 1);
-        const max = (10 ** digits) - 1;
-        while (true) {
-          let a = randomInt(min, max);
-          let b = randomInt(min, max);
-          if (subtract && b > a) [a, b] = [b, a];
-          if (hasExchange(a, b, subtract) === requiresExchange) return { a, b };
-        }
-      }
-      function makeSums() {
-        const count = Number(document.querySelector('input[name="question-count"]:checked').value);
-        const lengths = lengthEl.value === 'random'
-          ? [2, 3, 4]
-          : [{ '10s': 2, '100s': 3, '1000s': 4 }[lengthEl.value]];
-        const exchangeCount = exchangeEl.checked ? Math.ceil(count / 2) : 0;
-        const questions = Array.from({ length: count }, (_, index) => {
-          const digits = lengths[randomInt(0, lengths.length - 1)];
-          const subtract = operationEl.value === 'subtraction' || (operationEl.value === 'mixed' && index >= Math.ceil(count / 2));
-          const requiresExchange = exchangeEl.checked && index < exchangeCount;
-          return { ...makePair(digits, subtract, requiresExchange), subtract };
-        });
-        for (let i = questions.length - 1; i > 0; i--) {
-          const j = randomInt(0, i);
-          [questions[i], questions[j]] = [questions[j], questions[i]];
-        }
-        return questions;
-      }
-      function syncUrl() {
-        const selectedCount = document.querySelector('input[name="question-count"]:checked').value;
-        const url = new URL(window.location.href);
-        ['operation', 'count', 'length', 'exchange', 'artwork', 'dinosaurs'].forEach((key) => url.searchParams.delete(key));
-        const state = {
-          v: 2,
-          operation: operationEl.value,
-          count: Number(selectedCount),
-          length: lengthEl.value,
-          exchange: exchangeEl.checked,
-          artwork: artworkEl.value,
-          includeAnswers: answerToggle.checked,
-          questions: sums.map(({ a, b, subtract }) => [a, b, subtract])
-        };
-        const token = btoa(JSON.stringify(state)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
-        url.hash = token;
-        window.history.replaceState(null, '', url);
-      }
-      function artworkSvg(theme) {
-        const name = artworkNames[theme];
-        return `<svg viewBox="0 0 180 130" role="img" aria-label="${name} illustration"><title>${name}</title><path d="M12 101Q40 91 66 101t53 0q25-10 49 0v20H12z" fill="#ededed" stroke="none"/><path d="M19 35l4-9 4 9 9 4-9 4-4 9-4-9-9-4zM147 24l3-7 3 7 7 3-7 3-3 7-3-7-7-3z" fill="#fff" stroke="#262626" stroke-width="2" stroke-linejoin="round"/><g stroke="#262626" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${artworkScenes[theme]}</g><path d="M35 111h110" fill="none" stroke="#777" stroke-width="2" stroke-linecap="round"/></svg>`;
-      }
-      function renderArtwork() {
-        const selectedTheme = artworkEl.value;
-        heroArt.innerHTML = selectedTheme === 'none' ? '' : artworkSvg(selectedTheme);
-        heroArt.hidden = selectedTheme === 'none';
-      }
-      function renderAnswerSheet() {
-        answerSheet.classList.toggle('is-included', answerToggle.checked);
-        const operationName = operationEl.value === 'mixed'
-          ? 'mixed addition and subtraction'
-          : operationEl.value === 'subtraction' ? 'column subtraction' : 'column addition';
-        answerSubtitle.textContent = `Answers for ${operationName}.`;
-        answersEl.replaceChildren(...sums.map(({ a, b, subtract }, index) => {
-          const item = document.createElement('div'); item.className = 'answer-item';
-          const number = document.createElement('span'); number.className = 'answer-item-number'; number.textContent = String(index + 1).padStart(2, '0');
-          const value = document.createElement('span'); value.className = 'answer-item-value';
-          value.textContent = subtract ? a - b : a + b;
-          item.append(number, value);
-          return item;
-        }));
-      }
-      function handleOptionChange() {
-        render();
-        syncUrl();
-      }
-      function render(regenerate = true) {
-        const mixed = operationEl.value === 'mixed';
-        const subtract = operationEl.value === 'subtraction';
-        const title = mixed ? 'Mixed Addition & Subtraction' : subtract ? 'Column Subtraction' : 'Column Addition';
-        sheetTitle.textContent = title;
-        sheetSubtitle.textContent = mixed
-          ? 'Add and subtract. Line up each set of numbers!'
-          : subtract ? 'Line up the numbers. Take one away!' : 'Line up the numbers. Add them together!';
-        if (regenerate || !sums.length) sums = makeSums();
-        const printColumns = Math.min(4, Math.ceil(Math.sqrt(sums.length)));
-        questionsEl.style.setProperty('--print-columns', printColumns);
-        questionsEl.style.setProperty('--print-rows', Math.ceil(sums.length / printColumns));
-        questionsEl.replaceChildren(...sums.map(({a,b,subtract: questionSubtract}, index) => {
-          const card = document.createElement('div'); card.className = 'question';
-          const number = document.createElement('span'); number.className = 'question-num'; number.textContent = String(index + 1).padStart(2, '0');
-          const sum = document.createElement('div'); sum.className = 'sum';
-          const largestOperandLength = Math.max(String(a).length, String(b).length);
-          const availableFontSize = sums.length <= 6 ? 28 : sums.length <= 12 ? 25 : sums.length <= 16 ? 21 : 18;
-          const sumFontSize = Math.max(18, availableFontSize - (largestOperandLength - 2) * 2);
-          sum.style.setProperty('--sum-font-cqw', `${sumFontSize / 6}cqw`);
-          sum.style.setProperty('--sum-font-print', `${sumFontSize}pt`);
-          const rowA = document.createElement('div'); rowA.className = 'sum-row';
-          const blank = document.createElement('span'); blank.className = 'sum-sign';
-          const numA = document.createElement('span'); numA.className = 'sum-number'; numA.textContent = a;
-          rowA.append(blank, numA);
-          const rowB = document.createElement('div'); rowB.className = 'sum-row';
-          const sign = document.createElement('span'); sign.className = 'sum-sign'; sign.textContent = questionSubtract ? '−' : '+';
-          const numB = document.createElement('span'); numB.className = 'sum-number'; numB.textContent = b;
-          rowB.append(sign, numB);
-          const rule = document.createElement('div'); rule.className = 'sum-rule';
-          const answer = document.createElement('div'); answer.className = 'answer-space';
-          sum.append(rowA, rowB, rule, answer); card.append(number, sum); return card;
-        }));
-        renderArtwork();
-        renderAnswerSheet();
-      }
-      operationEl.addEventListener('change', handleOptionChange);
-      lengthEl.addEventListener('change', handleOptionChange);
-      artworkEl.addEventListener('change', () => {
-        renderArtwork();
-        syncUrl();
-      });
-      answerToggle.addEventListener('change', () => {
-        renderAnswerSheet();
-        syncUrl();
-      });
-      exchangeEl.addEventListener('change', handleOptionChange);
-      document.getElementById('regenerate-button').addEventListener('click', handleOptionChange);
-      document.getElementById('print-button').addEventListener('click', () => window.print());
-      document.getElementById('copy-button').addEventListener('click', async () => {
-        syncUrl();
-        try {
-          await navigator.clipboard.writeText(window.location.href);
-        } catch {
-          const input = document.createElement('textarea');
-          input.value = window.location.href;
-          input.style.position = 'fixed'; input.style.opacity = '0';
-          document.body.append(input); input.select();
-          const copied = document.execCommand('copy'); input.remove();
-          if (!copied) {
-            copyStatus.textContent = 'Copy was unavailable. You can copy the address bar link.';
-            return;
-          }
-        }
-        copyStatus.textContent = 'Worksheet link copied';
-      });
-      render(!sharedState);
-    })();
-  </script>
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
