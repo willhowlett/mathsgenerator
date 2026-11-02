@@ -28,7 +28,7 @@ Generate fresh questions when a question-generating option changes. Changing the
 
 - Persist the selected operation, question count, number length, exchange setting, and artwork setting in URL query parameters.
 - The copy-link action must copy a URL that restores those selected options when opened.
-- A direct visit to `index.html` with no query string must stay free of default query parameters. Add or update settings in the URL only after the user edits a form option; copying an untouched default page must not add them.
+- A direct visit to the app with no query string (including its clean GitHub Pages URL) must stay free of default query parameters. Add or update settings in the URL only after the user edits a form option; copying an untouched default page must not add them.
 - Unknown or invalid query parameter values should fall back to valid defaults.
 
 ## Implementation guidance

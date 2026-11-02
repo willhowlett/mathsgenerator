@@ -253,7 +253,7 @@
         const input = document.createElement('input');
         input.type = 'radio'; input.name = 'question-count'; input.value = n;
         input.checked = n === Number(document.documentElement.dataset.initialCount || 12);
-        input.addEventListener('change', render);
+        input.addEventListener('change', handleOptionChange);
         const span = document.createElement('span'); span.textContent = n;
         label.append(input, span); countOptions.append(label);
       }
@@ -316,6 +316,10 @@
         url.searchParams.set('dinosaurs', String(dinoEl.checked));
         window.history.replaceState(null, '', url);
       }
+      function handleOptionChange() {
+        render();
+        syncUrl();
+      }
       function render() {
         const subtract = operationEl.value === 'subtraction';
         const symbol = subtract ? '−' : '+';
@@ -349,13 +353,13 @@
           sum.append(rowA, rowB, rule, answer); card.append(number, sum); return card;
         }));
       }
-      operationEl.addEventListener('change', render);
-      lengthEl.addEventListener('change', render);
+      operationEl.addEventListener('change', handleOptionChange);
+      lengthEl.addEventListener('change', handleOptionChange);
       dinoEl.addEventListener('change', () => {
         dinoArt.hidden = !dinoEl.checked;
         syncUrl();
       });
-      exchangeEl.addEventListener('change', render);
+      exchangeEl.addEventListener('change', handleOptionChange);
       document.getElementById('print-button').addEventListener('click', () => window.print());
       document.getElementById('copy-button').addEventListener('click', async () => {
         try {
