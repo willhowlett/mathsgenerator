@@ -39,17 +39,29 @@ export function renderQuestions(container, questions, layout = 'column') {
       return card;
     }
     const sum = document.createElement('div'); sum.className = 'sum';
-    const largestOperandLength = Math.max(String(a).length, String(b).length, String(answerForQuestion(question)).length);
+    const stageHeight = questions.length <= 6 ? 40 : questions.length <= 12 ? 29 : questions.length <= 16 ? 21 : 15.8;
+    const rowHeight = questions.length <= 6 ? 5.6 : questions.length <= 12 ? 4.8 : questions.length <= 16 ? 4.2 : 3;
+    const lineTop = stageHeight / 2;
+    const setupTop = lineTop - rowHeight * 2;
+    sum.style.setProperty('--sum-stage-cqw', `${stageHeight}cqw`);
+    sum.style.setProperty('--sum-row-height-cqw', `${rowHeight}cqw`);
+    sum.style.setProperty('--sum-working-row-cqw', `${rowHeight * .58}cqw`);
+    sum.style.setProperty('--sum-line-top', `${lineTop}cqw`);
+    sum.style.setProperty('--sum-setup-top', `${setupTop}cqw`);
+    sum.style.setProperty('--sum-answer-top', 'calc(var(--sum-line-top) + 2px)');
+    const operandDigitCount = Math.max(String(a).length, String(b).length);
+    const setupDigits = operandDigitCount;
+    const largestOperandLength = operation === 'division'
+      ? Math.max(operandDigitCount, String(answerForQuestion(question)).length)
+      : operandDigitCount;
     sum.style.setProperty('--sum-digit-count', largestOperandLength);
     const availableFontSize = questions.length <= 6 ? 28 : questions.length <= 12 ? 25 : questions.length <= 16 ? 21 : 18;
     const preferredFontSize = Math.max(12, availableFontSize - (largestOperandLength - 2) * 2);
-    const sumFontSize = operation === 'multiplication' && questions.length > 12
-      ? Math.min(preferredFontSize, questions.length > 16 ? 9 : 12)
-      : preferredFontSize;
+    const sumFontSize = preferredFontSize;
     sum.style.setProperty('--sum-font-cqw', `${Math.max(1.6, sumFontSize / 6)}cqw`);
     sum.style.setProperty('--sum-font-print', `${Math.max(9, sumFontSize)}pt`);
     if (operation === 'multiplication') {
-      renderLongMultiplication(sum, question);
+      renderLongMultiplication(sum, question, setupDigits);
       card.append(number, sum);
       return card;
     }
@@ -58,62 +70,70 @@ export function renderQuestions(container, questions, layout = 'column') {
       card.append(number, sum);
       return card;
     }
-    const table = document.createElement('table'); table.className = 'sum-table';
-    table.style.width = `${0.85 + largestOperandLength * 0.72}em`;
-    const columns = document.createElement('colgroup');
-    const signColumn = document.createElement('col'); signColumn.className = 'sum-sign-column'; columns.append(signColumn);
-    for (let digit = 0; digit < largestOperandLength; digit++) {
-      const column = document.createElement('col'); column.className = 'sum-digit-column'; columns.append(column);
-    }
-    const body = document.createElement('tbody');
-    body.append(createDigitRow(a, largestOperandLength, ''), createDigitRow(b, largestOperandLength, operationSigns[operation] || '+'));
-    table.append(columns, body);
+    const setup = createColumnSetup(a, b, operation, setupDigits);
+    sum.style.width = setup.style.width;
+    setup.style.top = 'var(--sum-setup-top)';
     const rule = document.createElement('div'); rule.className = 'sum-rule';
-    rule.style.width = `${largestOperandLength * 0.72}em`;
+    rule.style.width = `${operandDigitCount * 0.72}em`;
+    rule.style.left = `${.85 + (setupDigits - operandDigitCount) * .72}em`;
+    rule.style.top = 'var(--sum-line-top)';
     const answer = document.createElement('div'); answer.className = 'answer-space';
-    answer.style.width = `${largestOperandLength * 0.72}em`;
-    sum.append(table, rule, answer);
+    answer.style.width = `${setupDigits * 0.72}em`;
+    answer.style.left = '.85em';
+    answer.style.top = 'var(--sum-answer-top)';
+    answer.style.bottom = '0';
+    sum.append(setup, rule, answer);
     card.append(number, sum);
     return card;
   }));
 }
 
-function createDigitRow(value, digitCount, sign) {
-  const row = document.createElement('tr');
-  const signCell = document.createElement('td'); signCell.className = 'sum-sign'; signCell.textContent = sign || '\u00a0';
-  row.append(signCell);
-  const digits = String(value).padStart(digitCount, ' ');
-  for (const digit of digits) {
-    const cell = document.createElement('td');
-    cell.className = 'sum-digit';
-    cell.textContent = digit === ' ' ? '\u00a0' : digit;
-    row.append(cell);
-  }
+function createColumnSetup(a, b, operation, digitCount) {
+  const setup = document.createElement('div'); setup.className = 'column-setup';
+  setup.style.width = `${0.85 + digitCount * 0.72}em`;
+  setup.style.left = '0';
+  setup.style.top = 'var(--sum-setup-top)';
+  setup.append(createColumnRow(a, digitCount, ''), createColumnRow(b, digitCount, operationSigns[operation] || '+'));
+  return setup;
+}
+
+function createColumnRow(value, digitCount, sign) {
+  const row = document.createElement('div'); row.className = 'column-row';
+  row.style.gridTemplateColumns = `.85em ${digitCount * .72}em`;
+  row.style.height = 'var(--sum-row-height-cqw)';
+  const signCell = document.createElement('span'); signCell.className = 'sum-sign'; signCell.textContent = sign;
+  const number = document.createElement('span'); number.className = 'column-number'; number.textContent = value;
+  row.append(signCell, number);
   return row;
 }
 
-function renderLongMultiplication(container, { a, b }) {
+function renderLongMultiplication(container, { a, b }, setupDigitCount) {
   const resultDigits = Math.max(String(a * b).length, String(a).length, String(b).length);
   container.style.setProperty('--sum-digit-count', resultDigits);
-  const table = document.createElement('table'); table.className = 'sum-table';
-  table.style.width = `${0.85 + resultDigits * 0.72}em`;
-  const columns = document.createElement('colgroup');
-  const signColumn = document.createElement('col'); signColumn.className = 'sum-sign-column'; columns.append(signColumn);
-  for (let digit = 0; digit < resultDigits; digit++) {
-    const column = document.createElement('col'); column.className = 'sum-digit-column'; columns.append(column);
-  }
-  const body = document.createElement('tbody');
-  body.append(createDigitRow(a, resultDigits, ''), createDigitRow(b, resultDigits, '×'));
-  table.append(columns, body);
-  container.append(table, createLongRule(resultDigits));
+  const setup = createColumnSetup(a, b, 'multiplication', setupDigitCount);
+  container.style.width = setup.style.width;
+  setup.style.top = 'var(--sum-setup-top)';
+  const rule = createLongRule(resultDigits);
+  const operandDigitCount = Math.max(String(a).length, String(b).length);
+  rule.style.width = `${operandDigitCount * .72}em`;
+  rule.style.left = `${.85 + (setupDigitCount - operandDigitCount) * .72}em`;
+  rule.style.top = 'var(--sum-line-top)';
+  container.append(setup, rule);
 
-  [...String(b)].reverse().forEach((digit, place) => {
+  const workingRowHeight = Number.parseFloat(container.style.getPropertyValue('--sum-working-row-cqw'));
+  const partialRows = [...String(b)].reverse();
+  partialRows.forEach((digit, place) => {
     const partialDigits = String(a * Number(digit)).length;
-    container.append(createWorkingRow(resultDigits, partialDigits, place, 'partial-product-row'));
+    const row = createWorkingRow(resultDigits, partialDigits, place, 'partial-product-row');
+    row.style.left = `${.85 + (setupDigitCount - resultDigits) * .72}em`;
+    row.style.top = `calc(var(--sum-answer-top) + ${place * workingRowHeight}cqw)`;
+    container.append(row);
   });
-  container.append(createLongRule(resultDigits));
   const answer = document.createElement('div'); answer.className = 'answer-space long-answer-space';
   answer.style.width = `${resultDigits * 0.72}em`;
+  answer.style.left = `${.85 + (setupDigitCount - resultDigits) * .72}em`;
+  answer.style.top = `calc(var(--sum-answer-top) + ${partialRows.length * workingRowHeight}cqw)`;
+  answer.style.bottom = '0';
   container.append(answer);
 }
 
@@ -125,34 +145,38 @@ function renderLongDivision(container, { a, b }) {
   container.style.setProperty('--sum-digit-count', dividendDigits);
 
   const layout = document.createElement('div'); layout.className = 'long-division';
+  const divisorWidth = divisorDigits * .72;
+  const dividendWidth = dividendDigits * .72;
+  layout.style.width = `${divisorWidth + dividendWidth + .28}em`;
+  container.style.width = layout.style.width;
   const divisor = createBareNumber(b, divisorDigits, 'division-divisor');
-  divisor.style.marginBottom = `${workingRows * .85}em`;
+  divisor.style.left = '0';
+  divisor.style.top = 'calc(var(--sum-line-top) + 2px)';
 
   const inside = document.createElement('div'); inside.className = 'division-inside';
+  inside.style.left = `${divisorWidth + .08}em`;
+  inside.style.top = '0';
+  inside.style.width = `${dividendWidth + .2}em`;
   inside.append(createWorkingRow(dividendDigits, quotientDigits, 0, 'division-quotient'));
+  inside.firstElementChild.style.left = '.2em';
   const vinculum = document.createElement('div'); vinculum.className = 'division-vinculum';
+  vinculum.style.left = '0';
   vinculum.append(createBareNumber(a, dividendDigits, 'division-dividend'));
   inside.append(vinculum);
   for (let row = 0; row < workingRows; row++) {
-    inside.append(createWorkingRow(dividendDigits, dividendDigits, 0, 'division-work-row'));
+    const working = createWorkingRow(dividendDigits, dividendDigits, 0, 'division-work-row');
+    working.style.left = '.28em';
+    working.style.top = `calc(var(--sum-line-top) + 1.25em + ${row * Number.parseFloat(container.style.getPropertyValue('--sum-working-row-cqw'))}cqw)`;
+    inside.append(working);
   }
   layout.append(divisor, inside);
   container.append(layout);
 }
 
 function createBareNumber(value, digitCount, className) {
-  const number = document.createElement('table'); number.className = `bare-number ${className}`;
+  const number = document.createElement('div'); number.className = `bare-number ${className}`;
   number.style.width = `${digitCount * 0.72}em`;
-  const columns = document.createElement('colgroup');
-  for (let digit = 0; digit < digitCount; digit++) {
-    const column = document.createElement('col'); column.className = 'sum-digit-column'; columns.append(column);
-  }
-  const body = document.createElement('tbody');
-  const row = document.createElement('tr');
-  for (const digit of String(value).padStart(digitCount, ' ')) {
-    const cell = document.createElement('td'); cell.className = 'sum-digit'; cell.textContent = digit === ' ' ? '\u00a0' : digit; row.append(cell);
-  }
-  body.append(row); number.append(columns, body);
+  number.textContent = value;
   return number;
 }
 

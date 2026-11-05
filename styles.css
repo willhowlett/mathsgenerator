@@ -128,28 +128,26 @@
     .prompt-text { color: #29372d; font-size: 2.25cqw; font-weight: 700; line-height: 1.35; white-space: pre-line; overflow-wrap: anywhere; }
     .prompt-answer { width: min(60%, 15cqw); min-height: 2.4cqw; }
     .prompt-answer-long { width: 92%; min-height: 6cqw; }
-    .sum { width: max-content; margin: 0 auto; color: #29372d; font-family: "Courier New", monospace; font-size: var(--sum-font-cqw, 3cqw); font-weight: 700; line-height: 1.25; }
-    .sum-table { table-layout: fixed; border-collapse: collapse; margin: 0 auto; }
-    .sum-sign-column { width: .85em; }
-    .sum-digit-column { width: .72em; }
-    .sum-table td { padding: 0; }
-    .bare-number { table-layout: fixed; border-collapse: collapse; margin: 0; }
-    .bare-number td { padding: 0; }
+    .sum { position: relative; width: max-content; height: var(--sum-stage-cqw, 32cqw); margin: 0 auto; color: #29372d; font-family: "Courier New", monospace; font-size: var(--sum-font-cqw, 3cqw); font-weight: 700; line-height: 1.25; }
+    .column-setup { position: absolute; display: flex; flex-direction: column; }
+    .column-row { display: grid; align-items: center; line-height: 1; }
+    .column-number { box-sizing: border-box; padding-right: .06em; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .bare-number { box-sizing: border-box; line-height: 1.25; padding-right: .06em; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .division-dividend { padding-right: 0; padding-left: .06em; text-align: left; letter-spacing: .12em; }
     .sum-sign { text-align: left; color: #719078; }
-    .sum-digit { text-align: center; }
-    .sum-rule { height: 2px; margin: .55cqw 0 0 .85em; background: #66776a; }
-    .answer-space { height: 6.2cqw; margin: 0 0 0 .85em; }
-    .working-digit-row { display: grid; align-items: end; height: 1.15em; }
+    .sum-rule { position: absolute; height: 2px; margin: 0; background: #66776a; }
+    .answer-space { position: absolute; margin: 0; }
+    .working-digit-row { position: absolute; display: grid; align-items: end; height: var(--sum-working-row-cqw, 3.6cqw); }
     .working-digit-cell { min-width: 0; }
-    .partial-product-row { height: 1.05em; margin-left: .85em; }
-    .long-rule { margin-top: .25cqw; }
-    .long-answer-space { height: 4.6cqw; margin-top: 0; }
-    .long-division { display: flex; align-items: flex-end; gap: .28em; width: max-content; margin: 0 auto; }
-    .division-inside { display: flex; flex-direction: column; align-items: flex-start; }
-    .division-quotient { height: .9em; margin-left: .2em; }
-    .division-vinculum { margin-left: .08em; padding-left: .2em; border-left: 2px solid #66776a; }
-    .division-dividend { border-top: 2px solid #66776a; }
-    .division-work-row { height: .85em; margin-left: .28em; }
+    .partial-product-row { height: var(--sum-working-row-cqw, 3.6cqw); }
+    .long-rule { margin-top: 0; }
+    .long-answer-space { min-height: 0; }
+    .long-division { position: absolute; top: 0; left: 50%; transform: translateX(-50%); }
+    .division-inside { position: absolute; }
+    .division-divisor { position: absolute; }
+    .division-quotient { position: absolute; top: calc(var(--sum-line-top) - var(--sum-row-height-cqw)); height: var(--sum-row-height-cqw); margin: 0; }
+    .division-vinculum { position: absolute; top: var(--sum-line-top); margin: 0; padding-left: .06em; border-top: 2px solid #66776a; border-left: 2px solid #66776a; }
+    .division-work-row { height: var(--sum-working-row-cqw, 3.6cqw); }
     .sheet-footer { display: flex; flex: 0 0 auto; align-items: center; justify-content: space-between; margin-top: 2.2cqw; padding-top: 1.1cqw; border-top: 1px solid #edf0e9; color: #9aa49a; font-size: 1.25cqw; }
     .hero-art[hidden] { display: none !important; }
     @media (max-width: 960px) {
@@ -199,7 +197,5 @@
       .prompt-answer { width: 30mm; min-height: 8mm; }
       .prompt-answer-long { width: 92%; min-height: 15mm; }
       .sum { margin: 0 auto; font-size: var(--sum-font-print, 18pt); }
-      .answer-space { height: 13mm; }
-      .long-answer-space { height: 9mm; }
       .sheet-footer { flex: 0 0 auto; margin-top: 6mm; padding-top: 3mm; font-size: 7pt; }
     }
