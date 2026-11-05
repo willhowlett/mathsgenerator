@@ -2,40 +2,39 @@
 
 ## Purpose and scope
 
-Build a simple, child-friendly, single-page web app that generates printable maths practice worksheets. The current scope is column addition and column subtraction. Keep the app easy to extend later for other UK Key Stage maths areas, but do not add those areas until requested.
+Build a child-friendly static single-page app that generates printable worksheets for addition, subtraction, multiplication, and division. The app runs entirely in the browser and deploys as static files. Keep it framework-free and do not add a build step unless requested.
 
-## Current worksheet options
+## Worksheet controls
 
-- Operation: column addition, column subtraction, or mixed addition and subtraction. A mixed worksheet must include both operations, with a varied question order.
-- Question count: 4, 6, 9, 12, 16, or 20. These counts must fill the configured question grid exactly; do not add artwork or filler items to empty grid cells.
-- Optional answer sheet: place a small checkbox below the print button. When checked, print a second A4 page with answers; never show that page in the live preview.
-- Number length: 10s (two-digit), 100s (three-digit), 1,000s (four-digit), or random across those lengths.
-- Exchange: when disabled, every question must be solvable without carrying (addition) or borrowing (subtraction). When enabled, at least half of the questions must require carrying or borrowing.
-- Artwork capability is implemented for none, dinosaurs, robots, ocean, jungle, knights, Greek myths, fairies, monsters, vehicles, K-pop, and rockstars. Keep its selector hidden in the interface for now; preserve its rendering and URL support so it can be re-enabled later. When selected through a saved URL, the theme gets a prominent illustration at the top-right. None hides all artwork.
-
-Generate fresh questions when a question-generating option changes. Changing the artwork option must not regenerate the questions.
-Provide a regenerate action that creates a new question set using the current options and updates the shared URL state.
+- Use column layout for every worksheet; there is no method selector.
+- Operations: offer Addition, Subtraction, Multiplication, and Division as chunky checkboxes. If none are checked, include all four operations.
+- Number length: offer Single digit, Tens, Hundreds, and Thousands as multi-select checkboxes. If none are checked, include all four lengths. Choose both operand lengths independently from the selected set so lengths can mix within each question.
+- Show the exchange option beneath Number length. When enabled, at least half of the applicable questions should need carrying (addition or multiplication), borrowing (subtraction), or regrouping (division). When disabled, column questions must not need any of those exchanges. Do not include zero as an operand.
+- Question count: 4, 6, 9, 12, 16, or 20. Fill the worksheet grid exactly without artwork or filler questions.
+- Keep the artwork selector hidden for now, but preserve the saved-theme rendering behavior. None hides artwork; saved themes show a prominent grayscale illustration at the top-right.
+- Keep the answer-sheet checkbox below the print button. Print answers on a separate second A4 page and never show that page in the live preview.
+- Generate new questions when operations, number length, exchange, or question count changes. Provide Regenerate, Copy worksheet link, and Print worksheet actions.
 
 ## Worksheet layout and printing
 
-- Provide a live preview that closely matches the printed page, including its A4 portrait proportions and question grid.
-- Print the worksheet on one A4 portrait page. If the answer-sheet option is selected, print the answers on a separate second A4 portrait page. Use the available question area well: size grid rows and columns to the selected question count and stretch the grid to fill that area.
-- Keep the worksheet black and white/grayscale for economical printing, including artwork and decorative details.
-- Keep name and date labels aligned with their writing lines.
-- Each vertical sum needs a clear answer space between the solid calculation line and the dotted answer line.
-- Keep operands aligned by place value and leave enough room for the selected number length.
-- Hide app controls and other interface elements from print output.
+- Keep the live preview close to the A4 portrait print layout; stretch the question grid to use its available area.
+- Print the worksheet on one A4 portrait page and the optional answers on a separate second A4 portrait page.
+- Keep the worksheet grayscale, preserve aligned name/date lines, and leave clear answer and working space.
+- Render multiplication as a long multiplication setup with place-shifted partial-product rows; render division with a divisor, dividend bracket, quotient answer row, and working rows.
+- Hide app controls and other interface elements in print output.
 
 ## Sharing settings
 
-- Persist the selected operation, question count, number length, exchange setting, artwork theme, answer-sheet setting, and generated questions in one versioned URL hash payload.
-- Opening a shared hash link must restore the exact questions and options without regenerating them. The copy-link action must encode the current worksheet, including on an untouched default page.
-- A direct visit to the app with no query or hash (including its clean GitHub Pages URL) must stay free of default URL state. Write the hash only after a user edits an option or requests a copy link.
-- Invalid hash data should be rejected safely and fall back to valid legacy query settings or app defaults. Continue reading the older query parameters for compatibility.
+- Persist the selected operations, selected number lengths, question count, exchange setting, artwork theme, answer-sheet setting, and exact generated questions, including each question's operand lengths, in one versioned URL hash. Keep the stored method as `column` for compatibility with existing shared-link data.
+- Opening a shared link restores its exact questions and options. Copying a link encodes the current worksheet, including the untouched default worksheet.
+- A clean direct visit must not add default URL state. Write the hash only after the user changes an option or requests a link.
+- Reject malformed hash data safely and continue accepting the previous worksheet hash formats and legacy query settings where practical.
 
-## Implementation guidance
+## Implementation and tests
 
-- The current app is a self-contained vanilla HTML/CSS/JavaScript page in `index.html`; avoid adding a framework or build step unless explicitly requested.
-- Keep user-facing text simple and encouraging for children and their adults.
-- Keep worksheet generation logic separate from artwork visibility and other presentation-only changes.
-- When adding future maths areas, extend the worksheet options and generation logic without changing the existing addition/subtraction behavior.
+- Load `styles.css` and the JavaScript ES module entry point directly from `index.html`; do not require a server-side application or build step.
+- Keep question generation in focused modules under `js/generators/` and shared rendering in `js/question-renderer.js`. Keep controls, sharing, and print actions in `app.js`.
+- Do not minify source files by hand. Keep source readable and static assets small.
+- Keep user-facing text simple and encouraging.
+- Use Jest for pure application helpers and generator modules. Keep tests in `tests/`; run them with `yarn test`.
+- Use `yarn start` to serve the static files locally through `server.js`.
